@@ -23,8 +23,12 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-import "./components/MapCanvas.jsx"
+import MapCanvas from "./components/MapCanvas.jsx"
+
+import { createRoot } from "react-dom/client"
+
 import React from "react"
+import userSocket from "./user_socket.js"
 
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
@@ -37,6 +41,7 @@ const liveSocket = new LiveSocket("/live", Socket, {
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+window.addEventListener("DOMContentLoaded", _info => initMapCanvas())
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
@@ -82,3 +87,10 @@ if (process.env.NODE_ENV === "development") {
   })
 }
 
+function initMapCanvas() {
+  const mapContainer = document.getElementById('map-canvas')
+  if (mapContainer) {
+    const root = createRoot(mapContainer)
+    root.render(<MapCanvas channel={userSocket.channel} />)
+  }
+}
