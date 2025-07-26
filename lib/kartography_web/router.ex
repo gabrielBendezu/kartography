@@ -19,6 +19,7 @@ defmodule KartographyWeb.Router do
 
     get "/", PageController, :home
     # route things here
+
   end
 
   # Other scopes may use custom stacks.
