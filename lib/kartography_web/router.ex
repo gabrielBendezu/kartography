@@ -19,6 +19,7 @@ defmodule KartographyWeb.Router do
 
     get "/", PageController, :home
     # route things here
+    get "/.well-known/appspecific/com.chrome.devtools.json", PageController, :devtools_json
 
   end
 
