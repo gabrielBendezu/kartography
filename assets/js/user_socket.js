@@ -25,6 +25,7 @@ socket.connect()
 console.log("Attempting to join channel map_room:1...")
 
 let channel = socket.channel("map_room:1", {})
+
 let chatInput = document.querySelector("#chat-input")
 let messagesContainer = document.querySelector("#messages")
 

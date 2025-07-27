@@ -9,19 +9,29 @@ const MapCanvas = ({ channel }) => {
     const canvas = new fabric.Canvas(canvasRef.current, {
       width: 600,
       height: 400,
-      backgroundColor: '#0000FF'
+      backgroundColor: '#0099FF'
+    });
+    
+    canvas.renderAll();
+
+    channel.on("canvas_update", payload => {
+      // Handle canvas updates from other users
     });
 
     // Clean up when component unmounts
     return () => {
       canvas.dispose();
+      channel.off("canvas_update");
     };
   }, []);
 
   return (
     <div>
       <h3>Map Canvas</h3>
-      <canvas ref={canvasRef} />
+      <canvas 
+        ref={canvasRef} 
+        style={{ border: '1px solid #000', display: 'block' }}
+      />
     </div>
   );
 };
