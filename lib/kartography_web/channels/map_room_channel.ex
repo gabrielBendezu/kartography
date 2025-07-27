@@ -1,5 +1,6 @@
 defmodule KartographyWeb.MapRoomChannel do
   use KartographyWeb, :channel
+  require Logger
 
   @impl true
   def join("room:1", _message, socket) do
@@ -32,6 +33,17 @@ defmodule KartographyWeb.MapRoomChannel do
   @impl true
   def handle_in("new_msg", %{"body" => body}, socket) do
     broadcast!(socket, "new_msg", %{body: body})
+    {:noreply, socket}
+  end
+
+  # Handle input is called by pheonix channel when channel.push() is called.
+  # channel.push("new_msg", {body: chatInput.value}), here, it is chatInput.value that
+  # becomes the map
+  @impl true
+  def handle_in("canvas_draw", %{"type" => "brush_stroke", "data" => data}, socket) do
+    Logger.info("Canvas draw received: #{inspect(data)}")
+
+    broadcast!(socket, "canvas_update", %{type: "brush_stroke", data: data})
     {:noreply, socket}
   end
 
