@@ -41,8 +41,6 @@ defmodule KartographyWeb.MapRoomChannel do
   # becomes the map
   @impl true
   def handle_in("canvas_draw", %{"type" => "brush_stroke", "data" => data}, socket) do
-    # Logger.info("Canvas draw received")
-
     broadcast!(socket, "canvas_update", %{type: "brush_stroke", data: data})
     {:noreply, socket}
   end
