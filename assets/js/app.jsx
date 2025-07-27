@@ -1,6 +1,6 @@
 // If you want to use Phoenix channels, run `mix help phx.gen.channel`
 // to get started and then uncomment the line below.
-import "./user_socket.js"
+import "./user_socket.jsx"
 
 // You can include dependencies in two ways.
 //
@@ -22,14 +22,15 @@ import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
-import topbar from "../vendor/topbar"
-import MapCanvas from "./components/MapCanvas.jsx"
+import topbar from "../vendor/topbar.js"
+import MapCanvas from "./components/map/MapCanvas.jsx"
+import ChatBox from "./components/ChatBox.jsx"
+
+import React from "react"
 
 import { createRoot } from "react-dom/client"
 
-import React from "react"
-import userSocket from "./user_socket.js"
-
+import userSocket from "./user_socket.jsx"
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
@@ -42,7 +43,7 @@ topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 
-window.addEventListener("DOMContentLoaded", _info => initMapCanvas())
+window.addEventListener("DOMContentLoaded", _info => initApp())
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
@@ -88,10 +89,19 @@ if (process.env.NODE_ENV === "development") {
   })
 }
 
-function initMapCanvas() {
-  const mapContainer = document.getElementById('map-canvas')
-  if (mapContainer) {
-    const root = createRoot(mapContainer)
-    root.render(<MapCanvas channel={userSocket.channel} />)
+function initApp() {
+  const appContainer = document.getElementById('app')
+  if (appContainer) {
+    const root = createRoot(appContainer)
+    root.render(<App />)
   }
+}
+
+function App() {
+  return (
+    <div>
+      <MapCanvas channel={userSocket.channel} />
+      <ChatBox channel={userSocket.channel} />
+    </div>
+  )
 }

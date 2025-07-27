@@ -3,7 +3,7 @@ defmodule KartographyWeb.MapRoomChannel do
   require Logger
 
   @impl true
-  def join("room:1", _message, socket) do
+  def join("map_room:1", _message, socket) do
     {:ok, socket}
   end
 
@@ -41,7 +41,7 @@ defmodule KartographyWeb.MapRoomChannel do
   # becomes the map
   @impl true
   def handle_in("canvas_draw", %{"type" => "brush_stroke", "data" => data}, socket) do
-    Logger.info("Canvas draw received: #{inspect(data)}")
+    # Logger.info("Canvas draw received")
 
     broadcast!(socket, "canvas_update", %{type: "brush_stroke", data: data})
     {:noreply, socket}

@@ -26,27 +26,6 @@ console.log("Attempting to join channel map_room:1...")
 
 let channel = socket.channel("map_room:1", {})
 
-let chatInput = document.querySelector("#chat-input")
-let messagesContainer = document.querySelector("#messages")
-
-// Test
-if (!chatInput || !messagesContainer) {
-  console.error("Required DOM elements not found:", { chatInput, messagesContainer })
-}
-
-chatInput.addEventListener("keypress", event => {
-  if(event.key === 'Enter'){
-    channel.push("new_msg", {body: chatInput.value})
-    chatInput.value = ""
-  }
-})
-
-channel.on("new_msg", payload => {
-  let messageItem = document.createElement("p")
-  messageItem.innerText = `[${Date()}] ${payload.body}`
-  messagesContainer.appendChild(messageItem)
-})
-
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
