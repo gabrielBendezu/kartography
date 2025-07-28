@@ -1,4 +1,3 @@
-// components/Canvas/FabricCanvas.jsx
 import React, { forwardRef } from 'react';
 
 const FabricCanvas = forwardRef(({ 
