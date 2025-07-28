@@ -3,11 +3,22 @@ import * as fabric from "fabric";
 import { Socket } from "phoenix";
 
 interface Channel {
-    on: (event: string, callback: (payload: any) => void) => void;
-    push: (event: string, data: any) => void;
-  }
+  on: (event: string, callback: (payload: any) => void) => void;
+  push: (event: string, data: any) => void;
+}
 
-const useChannelSync = (channel: any, canvas: fabric.Canvas) => {
+interface BrushStrokePayload {
+  type: "brush_stroke";
+  data: {
+    pathString?: string;
+    path?: any[];
+    stroke?: string;
+    strokeWidth?: number;
+    fill?: string;
+  };
+}
+
+const useChannelSync = (channel: Channel, canvas: fabric.Canvas) => {
   useEffect(() => {
     // Receive brush strokes
     channel.on("canvas_update", (payload) => {
@@ -36,6 +47,7 @@ const useChannelSync = (channel: any, canvas: fabric.Canvas) => {
           break;
       }
     });
+    
 
     // Send brush strokes
     // TODO: Maybe make the mapcanvas have it's own shared state, including brush settings
@@ -58,3 +70,5 @@ const useChannelSync = (channel: any, canvas: fabric.Canvas) => {
     });
   });
 };
+
+export default useChannelSync;

@@ -3,7 +3,7 @@
 // you uncomment its entry in "assets/js/app.js".
 
 // Bring in Phoenix channels client library:
-import { Socket } from "phoenix"
+import { Channel, Socket } from "phoenix"
 
 // Define types for Phoenix responses
 interface JoinResponse {
@@ -37,7 +37,7 @@ socket.connect()
 // subtopic is its id - in this case 1:
 console.log("Attempting to join channel map_room:1...")
 
-const channel: any = socket.channel("map_room:1", {})
+const channel: Channel = socket.channel("map_room:1", {})
 
 channel.join()
   .receive("ok", (resp: JoinResponse): void => { 
