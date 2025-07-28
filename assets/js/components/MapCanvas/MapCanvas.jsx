@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import * as fabric from 'fabric';
 
+import { useCanvas } from "../../hooks/useCanvas.jsx"
+import FabricCanvas from '../Canvas/FabricCanvas.jsx';
+
 const setupBrush = (canvas, options = {}) => {
   canvas.isDrawingMode = true;
   canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
@@ -10,19 +13,13 @@ const setupBrush = (canvas, options = {}) => {
 
 const MapCanvas = ({ channel }) => {
   const canvasRef = useRef(null);
-  const canvasInstanceRef = useRef(null);
+  //const canvasInstanceRef = useRef(null);
+  const canvas = useCanvas(canvasRef, {})
 
   useEffect(() => {
-    // Create a simple Fabric.js canvas
-    const canvas = new fabric.Canvas(canvasRef.current, {
-      width: 600,
-      height: 400,
-      backgroundColor: '#002080'
-    })
+    if (!canvas) return;
 
-    canvasInstanceRef.current = canvas;
     setupBrush(canvas, {});
-    
     canvas.renderAll();
 
     // Receive brush strokes
@@ -80,18 +77,14 @@ const MapCanvas = ({ channel }) => {
 
     // Clean up when component unmounts
     return () => {
-      canvas.dispose();
       channel.off("canvas_update");
     };
-  }, [channel]);
+  }, [canvas, channel]);
 
   return (
     <div>
       <h3>Map Canvas</h3>
-      <canvas 
-        ref={canvasRef} 
-        style={{ border: '1px solid #000', display: 'block' }}
-      />
+      <FabricCanvas ref={canvasRef} />   
     </div>
   );
 };

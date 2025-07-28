@@ -23,8 +23,8 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar.js"
-import MapCanvas from "./components/map/MapCanvas.jsx"
-import ChatBox from "./components/ChatBox.jsx"
+import MapCanvas from "./components/MapCanvas/MapCanvas.jsx"
+import ChatBox from "./components/chat/ChatBox.jsx"
 
 import React from "react"
 
