@@ -1,9 +1,15 @@
 import { useEffect } from "react";
+import * as fabric from "fabric";
+import { Socket } from "phoenix";
 
-const useChannelSync = () => {
+interface Channel {
+    on: (event: string, callback: (payload: any) => void) => void;
+    push: (event: string, data: any) => void;
+  }
+
+const useChannelSync = (channel: any, canvas: fabric.Canvas) => {
   useEffect(() => {
     // Receive brush strokes
-    hellovariable.createme();
     channel.on("canvas_update", (payload) => {
       switch (payload.type) {
         case "brush_stroke":

@@ -1,6 +1,14 @@
 import React, { forwardRef } from "react";
 
-const FabricCanvas = forwardRef(
+interface FabricCanvasProps {
+    width?: number;
+    height?: number;
+    backgroundColor?: string;
+    className?: string;
+    style?: React.CSSProperties;
+  }
+
+const FabricCanvas = forwardRef<HTMLCanvasElement, FabricCanvasProps>(
   (
     {
       width = 600,
