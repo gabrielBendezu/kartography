@@ -3,6 +3,7 @@ import { useEffect } from "react";
 const useChannelSync = () => {
   useEffect(() => {
     // Receive brush strokes
+    hellovariable.createme();
     channel.on("canvas_update", (payload) => {
       switch (payload.type) {
         case "brush_stroke":
