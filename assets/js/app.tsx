@@ -1,4 +1,5 @@
-import "./user_socket.tsx";
+// @ts-nocheck
+import "./user_socket.js";
 // If you have dependencies that try to import CSS, esbuild will generate a separate `app.css` file.
 // To load it, simply add a second `<link>` to your `root.html.heex` file.
 
@@ -8,13 +9,13 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar.js";
 import MapCanvas from "./components/MapCanvas/MapCanvas.jsx";
-import ChatBox from "./components/chat/ChatBox.jsx";
+import ChatBox from "./components/Chat/ChatBox.jsx";
 
 import React from "react";
 
 import { createRoot } from "react-dom/client";
 
-import userSocket from "./user_socket.jsx";
+import userSocket from "./user_socket.js";
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
