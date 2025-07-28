@@ -13,7 +13,6 @@ const setupBrush = (canvas, options = {}) => {
 
 const MapCanvas = ({ channel }) => {
   const canvasRef = useRef(null);
-  //const canvasInstanceRef = useRef(null);
   const canvas = useCanvas(canvasRef, {})
 
   useEffect(() => {
@@ -53,9 +52,7 @@ const MapCanvas = ({ channel }) => {
     });
   
     // Send brush strokes
-    // TODO: Maybe the channel(or a separate thing) should keep some mapcanvas data for everyone, which includes
-    // everyones current brush settings, such that the brush settings are always communicated when they are set by someone
-    // and not everytime someone draws.
+    // TODO: Maybe make the mapcanvas have it's own shared state, including brush settings
 
     canvas.on("path:created", (e) => {      
       // Use the SVG path string instead of array to avoid truncation
