@@ -1,5 +1,5 @@
 // @ts-nocheck
-import "./user_socket.tsx";
+import userSocket from "./user_socket.tsx";
 // If you have dependencies that try to import CSS, esbuild will generate a separate `app.css` file.
 // To load it, simply add a second `<link>` to your `root.html.heex` file.
 

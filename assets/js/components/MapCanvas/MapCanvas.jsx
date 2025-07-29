@@ -4,7 +4,7 @@ import * as fabric from 'fabric';
 
 import { useCanvas } from "../../hooks/useCanvas.jsx"
 import FabricCanvas from '../Canvas/FabricCanvas.jsx';
-import useChannelSync from "../../hooks/useChannelSync";
+import useChannelSync from "../../hooks/useChannelSync.tsx";
 
 const setupBrush = (canvas, options = {}) => {
   canvas.isDrawingMode = true;
