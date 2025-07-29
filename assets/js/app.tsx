@@ -8,13 +8,12 @@ import "phoenix_html";
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar.js";
-import MapCanvas from "./components/Map/MapCanvas.js";
 import ChatBox from "./components/Chat/ChatBox.jsx";
+import { MapCanvas, MapToolbar, MapLayout } from './components/Map'
 
 import React from "react";
 import { createRoot } from "react-dom/client";
 import Layout from "./components/App/Layout.js";
-import MapLayout from "./components/Map/MapLayout";
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
