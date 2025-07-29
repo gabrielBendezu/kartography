@@ -1,27 +1,23 @@
 import { useEffect } from "react";
 import * as fabric from "fabric";
-import { Socket } from "phoenix";
-
-interface Channel {
-  on: (event: string, callback: (payload: any) => void) => void;
-  push: (event: string, data: any) => void;
-}
+import { Channel } from "phoenix";
 
 interface BrushStrokePayload {
   type: "brush_stroke";
   data: {
     pathString?: string;
-    path?: any[];
+    path?: any[]; // Funky?
     stroke?: string;
     strokeWidth?: number;
     fill?: string;
   };
 }
 
-const useChannelSync = (channel: Channel, canvas: fabric.Canvas) => {
+const useChannelSync = (channel: Channel, canvas: fabric.Canvas | null) => {
   useEffect(() => {
+    if (!canvas) return;
     // Receive brush strokes
-    channel.on("canvas_update", (payload) => {
+    channel.on("canvas_update", (payload: BrushStrokePayload) => {
       switch (payload.type) {
         case "brush_stroke":
           // Regular path handling - use SVG string if available, fallback to path array
@@ -57,7 +53,7 @@ const useChannelSync = (channel: Channel, canvas: fabric.Canvas) => {
 
       const pathData = {
         pathString: pathString,
-        path: e.path.path,
+        //path: e.path.path,
         stroke: e.path.stroke,
         strokeWidth: e.path.strokeWidth,
         fill: e.path.fill,
@@ -66,9 +62,14 @@ const useChannelSync = (channel: Channel, canvas: fabric.Canvas) => {
       channel.push("canvas_draw", {
         type: "brush_stroke",
         data: pathData,
-      });
+      } as BrushStrokePayload);
     });
-  });
+
+    // Clean up when component unmounts
+    return () => {
+      channel.off("canvas_update");
+    };
+  }, [canvas, channel]);
 };
 
 export default useChannelSync;

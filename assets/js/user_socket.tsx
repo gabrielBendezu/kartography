@@ -47,11 +47,4 @@ channel.join()
     console.log("Unable to join", resp) 
   })
 
-interface SocketConnection {
-  socket: Socket;
-  channel: any; // Hmmm
-}
-
-const connection: SocketConnection = { socket, channel }
-
-export default connection
+export default { channel, socket }
