@@ -13,7 +13,7 @@ import ChatBox from "./components/Chat/ChatBox.jsx";
 
 import React from "react";
 import { createRoot } from "react-dom/client";
-import Layout from "./components/App/layout.js";
+import Layout from "./components/App/Layout.js";
 import MapLayout from "./components/Map/MapLayout";
 
 const csrfToken = document

@@ -1,8 +1,3 @@
-// socket.ts
-// NOTE: The contents of this file will only be executed if
-// you uncomment its entry in "assets/js/app.js".
-
-// Bring in Phoenix channels client library:
 import { Channel, Socket } from "phoenix"
 
 // Define types for Phoenix responses
