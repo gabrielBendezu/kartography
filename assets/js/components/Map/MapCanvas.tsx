@@ -22,7 +22,8 @@ interface MapCanvasProps {
 }
 
 const MapCanvas = ({ channel }: MapCanvasProps) => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  // @ts-ignore for canvasRef thinking it has a null parameter
   const canvas: fabric.Canvas | null = useCanvas(canvasRef, {});
 
   useChannelSync(channel, canvas);

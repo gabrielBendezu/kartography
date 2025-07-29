@@ -8,7 +8,7 @@ import "phoenix_html";
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar.js";
-import MapCanvas from "./components/MapCanvas/MapCanvas.jsx";
+import MapCanvas from "./components/Map/MapCanvas.js";
 import ChatBox from "./components/Chat/ChatBox.jsx";
 
 import React from "react";
