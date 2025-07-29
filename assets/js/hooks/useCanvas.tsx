@@ -16,9 +16,14 @@ export const useCanvas = (
   useEffect(() => {
     if (!canvasRef.current) return;
 
+    // Get container dimensions (parent element)
+    const containerElement = canvasRef.current.parentElement;
+    const containerWidth = containerElement?.offsetWidth || 600;
+    const containerHeight = containerElement?.offsetHeight || 400;
+
     const fabricCanvas: fabric.Canvas = new fabric.Canvas(canvasRef.current, {
-      width: options.width || 600,
-      height: options.height || 400,
+      width: options.width || containerWidth,
+      height: options.height || containerHeight,
       backgroundColor: options.backgroundColor || "#002080",
     });
 

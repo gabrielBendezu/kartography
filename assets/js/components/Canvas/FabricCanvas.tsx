@@ -11,7 +11,7 @@ interface FabricCanvasProps {
 const FabricCanvas = forwardRef<HTMLCanvasElement, FabricCanvasProps>(
   (
     {
-      width = 600,
+      width = 1000,
       height = 400,
       backgroundColor = "#002080",
       className = "",

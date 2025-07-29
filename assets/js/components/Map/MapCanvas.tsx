@@ -58,12 +58,7 @@ const MapCanvas = ({ channel, brushSettings }: MapCanvasProps) => {
   }, [canvas, brushSettings]);
 
   return (
-    <div className="map-canvas">
-      <h3 className="map-canvas-title">Map Canvas</h3>
-      <div className="map-canvas-container">
-        <FabricCanvas ref={canvasRef} className="map-fabric-canvas" />
-      </div>
-    </div>
+    <FabricCanvas ref={canvasRef} className="map-canvas" />
   );
 };
 
