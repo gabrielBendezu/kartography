@@ -8,3 +8,5 @@ const Layout = ({ children }: LayoutProps) => (
     <main className="main-content">{children}</main>
   </div>
 );
+
+export default Layout;

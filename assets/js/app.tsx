@@ -1,5 +1,5 @@
 // @ts-nocheck
-import userSocket from "./user_socket.tsx";
+import userSocket from "./components/App/user_socket.js";
 // If you have dependencies that try to import CSS, esbuild will generate a separate `app.css` file.
 // To load it, simply add a second `<link>` to your `root.html.heex` file.
 
@@ -12,8 +12,9 @@ import MapCanvas from "./components/Map/MapCanvas.js";
 import ChatBox from "./components/Chat/ChatBox.jsx";
 
 import React from "react";
-
 import { createRoot } from "react-dom/client";
+import Layout from "./components/App/layout.js";
+import MapLayout from "./components/Map/MapLayout";
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -91,9 +92,9 @@ function initApp() {
 
 function App() {
   return (
-    <div>
-      <MapCanvas channel={userSocket.channel} />
+    <Layout>
+      <MapLayout channel={userSocket.channel} />
       <ChatBox channel={userSocket.channel} />
-    </div>
+    </Layout>
   );
 }

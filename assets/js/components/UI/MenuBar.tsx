@@ -4,8 +4,6 @@ interface AppLayoutProps {
 
 const MenuBar = ({ children }: AppLayoutProps) => (
   <div className="menubar">
-    <Toolbar />
-    <MenuBar />
-    <main className="main-content">{children}</main>
+    <main className="menubar">{children}</main>
   </div>
 );
