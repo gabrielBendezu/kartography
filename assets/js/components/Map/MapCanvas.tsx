@@ -9,21 +9,43 @@ import styles from "./MapCanvas.module.css";
 
 import { Channel } from "phoenix";
 
+interface BrushSettings {
+  width: number;
+  color: string;
+  opacity: number;
+}
+
 const setupBrush = (
   canvas: fabric.Canvas,
-  options: { width?: number; color?: string } = {}
+  settings: BrushSettings
 ) => {
   canvas.isDrawingMode = true;
   canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
-  canvas.freeDrawingBrush.width = options.width || 5;
-  canvas.freeDrawingBrush.color = options.color || "#000000";
+  canvas.freeDrawingBrush.width = settings.width;
+  canvas.freeDrawingBrush.color = settings.color;
+  canvas.freeDrawingBrush.shadow = new fabric.Shadow({
+    color: settings.color,
+    blur: 0,
+    offsetX: 0,
+    offsetY: 0,
+    affectStroke: true
+  });
+  // Set brush opacity by adjusting the color alpha
+  if (settings.opacity < 1) {
+    const hex = settings.color.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    canvas.freeDrawingBrush.color = `rgba(${r}, ${g}, ${b}, ${settings.opacity})`;
+  }
 };
 
 interface MapCanvasProps {
   channel: Channel;
+  brushSettings: BrushSettings;
 }
 
-const MapCanvas = ({ channel }: MapCanvasProps) => {
+const MapCanvas = ({ channel, brushSettings }: MapCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-ignore for canvasRef thinking it has a null parameter
   const canvas: fabric.Canvas | null = useCanvas(canvasRef, {});
@@ -32,9 +54,9 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
 
   useEffect(() => {
     if (!canvas) return;
-    setupBrush(canvas, {});
+    setupBrush(canvas, brushSettings);
     canvas.renderAll();
-  }, [canvas]);
+  }, [canvas, brushSettings]);
 
   return (
     <div className={styles.mapCanvas}>

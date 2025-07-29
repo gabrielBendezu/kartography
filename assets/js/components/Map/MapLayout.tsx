@@ -48,7 +48,7 @@ const MapLayout = ({ channel }: MapLayoutProps) => {
         />
       </div>
       <div className={styles.canvasArea}>
-        <MapCanvas channel={channel} />
+        <MapCanvas channel={channel} brushSettings={brushSettings} />
       </div>
     </div>
   );
