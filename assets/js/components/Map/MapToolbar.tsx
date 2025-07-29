@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import styles from './MapToolbar.module.css';
 
 export type ToolType = 'brush' | 'eraser' | 'select' | 'image' | 'text';
 
@@ -48,29 +47,29 @@ const MapToolbar = ({ onToolChange, onBrushSettingsChange, onImageSelect }: MapT
   };
 
   return (
-    <div className={styles.toolbar}>
+    <div className="map-toolbar">
       {/* Tool Selection */}
-      <div className={styles.toolGroup}>
+      <div className="map-tool-group">
         <button 
-          className={`${styles.toolButton} ${activeTool === 'brush' ? styles.active : ''}`}
+          className={`map-tool-button ${activeTool === 'brush' ? 'active' : ''}`}
           onClick={() => handleToolSelect('brush')}
         >
           Brush
         </button>
         <button 
-          className={`${styles.toolButton} ${activeTool === 'eraser' ? styles.active : ''}`}
+          className={`map-tool-button ${activeTool === 'eraser' ? 'active' : ''}`}
           onClick={() => handleToolSelect('eraser')}
         >
           Eraser
         </button>
         <button 
-          className={`${styles.toolButton} ${activeTool === 'select' ? styles.active : ''}`}
+          className={`map-tool-button ${activeTool === 'select' ? 'active' : ''}`}
           onClick={() => handleToolSelect('select')}
         >
           Select
         </button>
         <button 
-          className={`${styles.toolButton} ${activeTool === 'image' ? styles.active : ''}`}
+          className={`map-tool-button ${activeTool === 'image' ? 'active' : ''}`}
           onClick={handleImageClick}
         >
           Image
@@ -79,8 +78,8 @@ const MapToolbar = ({ onToolChange, onBrushSettingsChange, onImageSelect }: MapT
 
       {/* Brush Settings - Show when brush is active */}
       {activeTool === 'brush' && (
-        <div className={styles.toolSettings}>
-          <label className={styles.setting}>
+        <div className="map-tool-settings">
+          <label className="map-tool-setting">
             Size:
             <input
               type="range"
@@ -91,7 +90,7 @@ const MapToolbar = ({ onToolChange, onBrushSettingsChange, onImageSelect }: MapT
             />
             <span>{brushSettings.width}px</span>
           </label>
-          <label className={styles.setting}>
+          <label className="map-tool-setting">
             Color:
             <input
               type="color"
@@ -99,7 +98,7 @@ const MapToolbar = ({ onToolChange, onBrushSettingsChange, onImageSelect }: MapT
               onChange={(e) => handleBrushChange('color', e.target.value)}
             />
           </label>
-          <label className={styles.setting}>
+          <label className="map-tool-setting">
             Opacity:
             <input
               type="range"

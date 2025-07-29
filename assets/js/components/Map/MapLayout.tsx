@@ -1,7 +1,6 @@
 import MapToolbar, { ToolType } from "./MapToolbar";
 import MapCanvas from "./MapCanvas";
 import { useState } from "react";
-import styles from "./MapLayout.module.css";
 
 import { Channel } from "phoenix";
 
@@ -39,15 +38,15 @@ const MapLayout = ({ channel }: MapLayoutProps) => {
   };
 
   return (
-    <div className={styles.mapLayout}>
-      <div className={styles.toolbar}>
+    <div className="map-layout">
+      <div className="map-toolbar-wrapper">
         <MapToolbar 
           onToolChange={handleToolChange}
           onBrushSettingsChange={handleBrushSettingsChange}
           onImageSelect={handleImageSelect}
         />
       </div>
-      <div className={styles.canvasArea}>
+      <div className="map-canvas-area">
         <MapCanvas channel={channel} brushSettings={brushSettings} />
       </div>
     </div>

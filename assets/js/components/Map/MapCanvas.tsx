@@ -5,7 +5,6 @@ import { useCanvas } from "../../hooks/useCanvas";
 import FabricCanvas from "../Canvas/FabricCanvas.js";
 import useChannelSync from "../../hooks/useChannelSync";
 
-import styles from "./MapCanvas.module.css";
 
 import { Channel } from "phoenix";
 
@@ -59,10 +58,10 @@ const MapCanvas = ({ channel, brushSettings }: MapCanvasProps) => {
   }, [canvas, brushSettings]);
 
   return (
-    <div className={styles.mapCanvas}>
-      <h3 className={styles.canvasTitle}>Map Canvas</h3>
-      <div className={styles.canvasContainer}>
-        <FabricCanvas ref={canvasRef} className={styles.fabricCanvas} />
+    <div className="map-canvas">
+      <h3 className="map-canvas-title">Map Canvas</h3>
+      <div className="map-canvas-container">
+        <FabricCanvas ref={canvasRef} className="map-fabric-canvas" />
       </div>
     </div>
   );
