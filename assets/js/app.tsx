@@ -93,7 +93,7 @@ function App() {
   return (
     <Layout>
       <MapLayout channel={userSocket.channel} />
-      <ChatBox channel={userSocket.channel} />
+      {/* <ChatBox channel={userSocket.channel} /> */}
     </Layout>
   );
 }
