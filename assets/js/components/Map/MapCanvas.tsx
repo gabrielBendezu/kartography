@@ -5,19 +5,11 @@ import { useCanvas } from "../../hooks/useCanvas";
 import FabricCanvas from "../Canvas/FabricCanvas.js";
 import useChannelSync from "../../hooks/useChannelSync";
 
+import { BrushSettings } from "./types";
 
 import { Channel } from "phoenix";
 
-interface BrushSettings {
-  width: number;
-  color: string;
-  opacity: number;
-}
-
-const setupBrush = (
-  canvas: fabric.Canvas,
-  settings: BrushSettings
-) => {
+const setupBrush = (canvas: fabric.Canvas, settings: BrushSettings) => {
   canvas.isDrawingMode = true;
   canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
   canvas.freeDrawingBrush.width = settings.width;
@@ -27,11 +19,11 @@ const setupBrush = (
     blur: 0,
     offsetX: 0,
     offsetY: 0,
-    affectStroke: true
+    affectStroke: true,
   });
   // Set brush opacity by adjusting the color alpha
   if (settings.opacity < 1) {
-    const hex = settings.color.replace('#', '');
+    const hex = settings.color.replace("#", "");
     const r = parseInt(hex.substr(0, 2), 16);
     const g = parseInt(hex.substr(2, 2), 16);
     const b = parseInt(hex.substr(4, 2), 16);
@@ -58,7 +50,10 @@ const MapCanvas = ({ channel, brushSettings }: MapCanvasProps) => {
   }, [canvas, brushSettings]);
 
   return (
-    <FabricCanvas ref={canvasRef} className="map-canvas" />
+    <FabricCanvas
+      ref={canvasRef}
+      className="w-full h-full border border-base-300 cursor-crosshair focus:outline-2 focus:outline-info focus:outline-offset-2"
+    />
   );
 };
 

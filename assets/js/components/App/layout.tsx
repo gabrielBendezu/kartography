@@ -3,9 +3,11 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => (
-  <div className="app-layout">
-    <header className="app-header">Kartography</header>
-    <main className="app-main-content">{children}</main>
+  <div className="flex flex-col h-screen w-full">
+    <header className="bg-warning text-warning-content px-4 py-3 text-lg font-semibold flex-shrink-0">
+      Kartography
+    </header>
+    <main className="flex-1 overflow-hidden">{children}</main>
   </div>
 );
 

@@ -4,11 +4,7 @@ import { useState } from "react";
 
 import { Channel } from "phoenix";
 
-interface BrushSettings {
-  width: number;
-  color: string;
-  opacity: number;
-}
+import { BrushSettings } from "./types";
 
 interface MapLayoutProps {
   channel: Channel;
@@ -20,7 +16,7 @@ const MapLayout = ({ channel }: MapLayoutProps) => {
     width: 5,
     color: "#000000",
     opacity: 1,
-  });
+  }); // this should be a hook called maybe useMapState
 
   const handleToolChange = (tool: ToolType) => {
     setCurrentTool(tool);
@@ -38,15 +34,15 @@ const MapLayout = ({ channel }: MapLayoutProps) => {
   };
 
   return (
-    <div className="map-layout">
-      <div className="map-toolbar-wrapper">
+    <div className="flex h-full w-full">
+      <div className="flex-shrink-0">
         <MapToolbar
           onToolChange={handleToolChange}
           onBrushSettingsChange={handleBrushSettingsChange}
           onImageSelect={handleImageSelect}
         />
       </div>
-      <div className="map-canvas-area">
+      <div className="flex-1 relative overflow-hidden m-12 bg-error">
         <MapCanvas channel={channel} brushSettings={brushSettings} />
       </div>
     </div>
