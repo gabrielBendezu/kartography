@@ -9,7 +9,7 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar.js";
 import ChatBox from "./components/Chat/ChatBox.jsx";
-import { MapCanvas, MapToolbar, MapLayout } from './components/Map'
+import { MapCanvas, MapToolbar, MapLayout } from "./components/Map";
 
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -93,7 +93,6 @@ function App() {
   return (
     <Layout>
       <MapLayout channel={userSocket.channel} />
-      {/* <ChatBox channel={userSocket.channel} /> */}
     </Layout>
   );
 }
