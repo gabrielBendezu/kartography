@@ -4,12 +4,13 @@ import * as fabric from "fabric";
 import { useCanvas } from "../../hooks/useCanvas";
 import FabricCanvas from "../Canvas/FabricCanvas.js";
 import useChannelSync from "../../hooks/useChannelSync";
+import { useMapContext } from "../../contexts/MapContext";
 
-import { BrushSettings } from "./types";
+import { BrushConfig } from "./types";
 
 import { Channel } from "phoenix";
 
-const setupBrush = (canvas: fabric.Canvas, settings: BrushSettings) => {
+const setupBrush = (canvas: fabric.Canvas, settings: BrushConfig) => {
   canvas.isDrawingMode = true;
   canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
   canvas.freeDrawingBrush.width = settings.width;
@@ -24,19 +25,19 @@ const setupBrush = (canvas: fabric.Canvas, settings: BrushSettings) => {
   // Set brush opacity by adjusting the color alpha
   if (settings.opacity < 1) {
     const hex = settings.color.replace("#", "");
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
     canvas.freeDrawingBrush.color = `rgba(${r}, ${g}, ${b}, ${settings.opacity})`;
   }
 };
 
 interface MapCanvasProps {
   channel: Channel;
-  brushSettings: BrushSettings;
 }
 
-const MapCanvas = ({ channel, brushSettings }: MapCanvasProps) => {
+const MapCanvas = ({ channel }: MapCanvasProps) => {
+  const { brushSettings } = useMapContext();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // @ts-ignore for canvasRef thinking it has a null parameter
   const canvas: fabric.Canvas | null = useCanvas(canvasRef, {});
