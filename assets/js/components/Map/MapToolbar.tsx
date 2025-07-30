@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import ToolSettings from "./ToolSettings";
-import BrushSettings from "./ToolBarSettings/BrushSettings";
+import { BrushSettings } from "./ToolbarSettings";
 import { useMapContext } from "../../contexts/MapContext";
 
 export type ToolType = "brush" | "eraser" | "select" | "image" | "text";
