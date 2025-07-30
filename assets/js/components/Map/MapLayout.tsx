@@ -15,7 +15,7 @@ const MapLayout = ({ channel }: MapLayoutProps) => {
         <div className="flex-shrink-0">
           <MapToolbar />
         </div>
-        <div className="flex-1 relative overflow-hidden m-12 bg-error">
+        <div className="flex-1 relative overflow-hidden m-12">
           <MapCanvas channel={channel} />
         </div>
       </div>

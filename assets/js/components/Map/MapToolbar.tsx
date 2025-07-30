@@ -3,16 +3,15 @@ import ToolSettings from "./ToolSettings";
 import { BrushSettings } from "./ToolbarSettings";
 import { useMapContext } from "../../contexts/MapContext";
 
-export type ToolType = "brush" | "eraser" | "select" | "image" | "text";
+import { ToolType } from "./types";
 
 const MapToolbar = () => {
   const { activeTool, setActiveTool } = useMapContext();
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [showSettings, setShowSettings] = useState(false);
   const [settingsPosition, setSettingsPosition] = useState({ x: 0, y: 0 });
   const toolbarRef = useRef<HTMLDivElement>(null);
-  
+
   const handleToolClick = (tool: ToolType, event: React.MouseEvent) => {
     setActiveTool(tool);
 
@@ -20,69 +19,91 @@ const MapToolbar = () => {
     const rect = toolbarRef.current?.getBoundingClientRect();
     if (rect) {
       setSettingsPosition({
-        x: rect.right + 8, 
+        x: rect.right + 8,
         y: rect.top + (event.currentTarget as HTMLElement).offsetTop,
       });
     }
     setShowSettings(true);
   };
 
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // TODO: Handle image file upload
-      console.log("Image selected:", file.name);
-      setActiveTool("image");
-    }
-  };
-
   return (
     <>
-      <div ref={toolbarRef} className="flex flex-col w-16 min-h-full bg-base-200 border-r border-base-300 p-2 gap-2">
+      <div
+        ref={toolbarRef}
+        className="flex flex-col w-16 min-h-full bg-base-200 border-r border-base-300 p-2 gap-2"
+      >
         {/* Tool Selection */}
         <div className="flex flex-col gap-1">
           <button
-            className={`btn btn-square btn-md ${
-              activeTool === "brush" ? "btn-primary" : "btn-ghost"
-            }`}
-            onClick={(e) => handleToolClick("brush", e)}
-          >
-            Brush
-          </button>
-          <button
-            className={`btn btn-square btn-md ${
-              activeTool === "eraser" ? "btn-primary" : "btn-ghost"
-            }`}
-            onClick={(e) => handleToolClick("eraser", e)}
-          >
-            Eraser
-          </button>
-          <button
-            className={`btn btn-square btn-md ${
+            className={`btn btn-square btn-md tooltip tooltip-right ${
               activeTool === "select" ? "btn-primary" : "btn-ghost"
             }`}
             onClick={(e) => handleToolClick("select", e)}
+            data-tip="Select"
           >
-            Select
+            <span className="hero-hand-raised bg-current size-6"></span>
           </button>
+
           <button
-            className={`btn btn-square btn-md ${
-              activeTool === "image" ? "btn-primary" : "btn-ghost"
+            className={`btn btn-square btn-md tooltip tooltip-right ${
+              activeTool === "terrain" ? "btn-primary" : "btn-ghost"
             }`}
-            onClick={(e) => handleToolClick("image", e)}
+            onClick={(e) => handleToolClick("terrain", e)}
+            data-tip="Terrain"
           >
-            Image
+            <span className="hero-globe-asia-australia bg-current size-6"></span>
+          </button>
+
+          <button
+            className={`btn btn-square btn-md tooltip tooltip-right ${
+              activeTool === "brush" ? "btn-primary" : "btn-ghost"
+            }`}
+            onClick={(e) => handleToolClick("brush", e)}
+            data-tip="Brush"
+          >
+            <span className="hero-paint-brush bg-current size-6"></span>
+          </button>
+
+          <button
+            className={`btn btn-square btn-md tooltip tooltip-right ${
+              activeTool === "object" ? "btn-primary" : "btn-ghost"
+            }`}
+            onClick={(e) => handleToolClick("object", e)}
+            data-tip="Objects"
+          >
+            <span className="hero-building-library bg-current size-6"></span>
+          </button>
+
+          <button
+            className={`btn btn-square btn-md tooltip tooltip-right ${
+              activeTool === "text" ? "btn-primary" : "btn-ghost"
+            }`}
+            onClick={(e) => handleToolClick("text", e)}
+            data-tip="Text"
+          >
+            <span className="hero-document-text bg-current size-6"></span>
+          </button>
+
+          <button
+            className={`btn btn-square btn-md tooltip tooltip-right ${
+              activeTool === "path" ? "btn-primary" : "btn-ghost"
+            }`}
+            onClick={(e) => handleToolClick("path", e)}
+            data-tip="Path"
+          >
+            <span className="hero-minus bg-current size-6"></span>
+          </button>
+
+          <button
+            className={`btn btn-square btn-md tooltip tooltip-right ${
+              activeTool === "semantic_layer" ? "btn-primary" : "btn-ghost"
+            }`}
+            onClick={(e) => handleToolClick("semantic_layer", e)}
+            data-tip="Semantic layers"
+          >
+            <span className="hero-rectangle-stack bg-current size-6"></span>
           </button>
         </div>
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileSelect}
-          className="hidden"
-          ref={fileInputRef}
-        />
       </div>
 
       <ToolSettings

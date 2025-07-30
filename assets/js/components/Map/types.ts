@@ -1,3 +1,5 @@
+export type ToolType = "select" | "terrain" | "brush" | "object" | "text" | "path" | "semantic_layer";
+
 export interface BrushConfig {
   width: number;
   color: string;
