@@ -15,11 +15,11 @@ interface MapLayoutProps {
 }
 
 const MapLayout = ({ channel }: MapLayoutProps) => {
-  const [currentTool, setCurrentTool] = useState<ToolType>('brush');
+  const [currentTool, setCurrentTool] = useState<ToolType>("brush");
   const [brushSettings, setBrushSettings] = useState<BrushSettings>({
     width: 5,
-    color: '#000000',
-    opacity: 1
+    color: "#000000",
+    opacity: 1,
   });
 
   const handleToolChange = (tool: ToolType) => {
@@ -34,13 +34,13 @@ const MapLayout = ({ channel }: MapLayoutProps) => {
 
   const handleImageSelect = (file: File) => {
     // TODO: Handle image placement on canvas
-    console.log('Image selected:', file.name);
+    console.log("Image selected:", file.name);
   };
 
   return (
     <div className="map-layout">
       <div className="map-toolbar-wrapper">
-        <MapToolbar 
+        <MapToolbar
           onToolChange={handleToolChange}
           onBrushSettingsChange={handleBrushSettingsChange}
           onImageSelect={handleImageSelect}
