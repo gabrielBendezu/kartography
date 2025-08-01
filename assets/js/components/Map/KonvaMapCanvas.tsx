@@ -2,13 +2,22 @@ import Konva from "konva";
 import React from "react";
 import { Stage, Layer, Line } from "react-konva";
 
+import { Channel } from "phoenix";
+
+import Background from "../Canvas/Background";
+import { useMapContext } from "../../contexts/MapContext";
+
 type BrushLine = {
   tool: string;
   points: number[];
 };
 
-const KonvaMapCanvas = () => {
-  const [tool, setTool] = React.useState("brush");
+interface KonvaMapCanvasProps {
+    channel: Channel;
+  }
+
+const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
+  const { activeTool, brushSettings } = useMapContext();
   const [lines, setLines] = React.useState<BrushLine[]>([]);
   const isDrawing = React.useRef(false);
 
@@ -20,7 +29,7 @@ const KonvaMapCanvas = () => {
     const position = getPointerPosition(payload);
     if (!position) return;
 
-    setLines([...lines, { tool, points: [position.x, position.y] }]);
+    setLines([...lines, { tool: activeTool, points: [position.x, position.y] }]);
   };
 
   const handleMouseMove = (
@@ -63,18 +72,7 @@ const KonvaMapCanvas = () => {
   };
 
   return (
-    <>
-      <select
-        value={tool}
-        onChange={(e) => {
-          setTool(e.target.value);
-        }}
-      >
-        <option value="brush">Brush</option>
-        <option value="eraser">Eraser</option>
-        <option value="landmass">Landmass</option>
-      </select>
-      <Stage
+    <Stage className="w-full h-full border border-base-300 cursor-crosshair focus:outline-2 focus:outline-info focus:outline-offset-2"
         width={window.innerWidth}
         height={window.innerHeight - 25}
         onMouseDown={handleMouseDown}
@@ -84,13 +82,15 @@ const KonvaMapCanvas = () => {
         onTouchMove={handleMouseMove}
         onTouchEnd={handleMouseUp}
       >
+        <Background/>
         <Layer>
           {lines.map((line, i) => (
             <Line
               key={i}
               points={line.points}
-              stroke="#df4b26"
-              strokeWidth={5}
+              stroke={brushSettings.color}
+              strokeWidth={brushSettings.width}
+              opacity={brushSettings.opacity}
               tension={0.5}
               lineCap="round"
               lineJoin="round"
@@ -101,7 +101,6 @@ const KonvaMapCanvas = () => {
           ))}
         </Layer>
       </Stage>
-    </>
   );
 };
 

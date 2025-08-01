@@ -2,6 +2,7 @@ import MapToolbar from "./MapToolbar";
 import MapCanvas from "./MapCanvas";
 import { MapContextProvider } from "../../contexts/MapContext";
 import KonvaMapCanvas from "./KonvaMapCanvas";
+import { useState } from "react";
 
 import { Channel } from "phoenix";
 
@@ -10,6 +11,8 @@ interface MapLayoutProps {
 }
 
 const MapLayout = ({ channel }: MapLayoutProps) => {
+  const [tool, setTool] = useState("brush");
+
   return (
     <MapContextProvider>
       <div className="flex h-full w-full">
@@ -20,7 +23,7 @@ const MapLayout = ({ channel }: MapLayoutProps) => {
           <MapCanvas channel={channel} />
         </div>
         <div className="flex-1 relative overflow-hidden m-12">
-          <KonvaMapCanvas />
+          <KonvaMapCanvas channel={channel} />
         </div>
       </div>
     </MapContextProvider>
