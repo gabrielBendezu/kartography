@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { ToolType } from "../components/Map/MapToolbar";
+import { ToolType } from "../components/Map/types";
 import { BrushConfig } from "../components/Map/types";
 
 interface MapContextType {
