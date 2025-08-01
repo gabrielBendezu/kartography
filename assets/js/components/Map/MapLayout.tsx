@@ -11,8 +11,6 @@ interface MapLayoutProps {
 }
 
 const MapLayout = ({ channel }: MapLayoutProps) => {
-  const [tool, setTool] = useState("brush");
-
   return (
     <MapContextProvider>
       <div className="flex h-full w-full">
