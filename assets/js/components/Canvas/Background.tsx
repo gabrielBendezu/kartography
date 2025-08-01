@@ -1,6 +1,9 @@
 import { Layer, Rect, Text } from "react-konva";
+import { rgb } from "d3-color";
 
 const Background = () => {
+  const marineBlue = rgb(25, 82, 120).toString();
+  
   return (
     <Layer>
       <Rect
@@ -8,7 +11,7 @@ const Background = () => {
         y={0}
         width={window.innerWidth}
         height={window.innerHeight}
-        fill="blue"
+        fill={marineBlue}
       />
     </Layer>
   );
