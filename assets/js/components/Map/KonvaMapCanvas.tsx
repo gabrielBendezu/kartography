@@ -5,11 +5,15 @@ import { Stage, Layer, Line } from "react-konva";
 import { Channel } from "phoenix";
 
 import Background from "../Canvas/Background";
+import Foreground from "../Canvas/Foreground";
 import { useMapContext } from "../../contexts/MapContext";
 
 type BrushLine = {
   tool: string;
   points: number[];
+  color: string;
+  width: number;
+  opacity: number;
 };
 
 interface KonvaMapCanvasProps {
@@ -29,7 +33,13 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
     const position = getPointerPosition(payload);
     if (!position) return;
 
-    setLines([...lines, { tool: activeTool, points: [position.x, position.y] }]);
+    setLines([...lines, { 
+      tool: activeTool, 
+      points: [position.x, position.y],
+      color: brushSettings.color,
+      width: brushSettings.width,
+      opacity: brushSettings.opacity
+    }]);
   };
 
   const handleMouseMove = (
@@ -83,14 +93,14 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
         onTouchEnd={handleMouseUp}
       >
         <Background/>
-        <Layer>
+        <Foreground>
           {lines.map((line, i) => (
             <Line
               key={i}
               points={line.points}
-              stroke={brushSettings.color}
-              strokeWidth={brushSettings.width}
-              opacity={brushSettings.opacity}
+              stroke={line.color}
+              strokeWidth={line.width}
+              opacity={line.opacity}
               tension={0.5}
               lineCap="round"
               lineJoin="round"
@@ -99,7 +109,7 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
               }
             />
           ))}
-        </Layer>
+        </Foreground>
       </Stage>
   );
 };

@@ -1,6 +1,4 @@
-import Konva from "konva";
 import { Layer, Rect, Text } from "react-konva";
-import React from "react";
 
 const Background = () => {
   return (
@@ -12,7 +10,6 @@ const Background = () => {
         height={window.innerHeight}
         fill="blue"
       />
-      <Text text="The ocean" fontSize={16} fill="yellow" />
     </Layer>
   );
 };
