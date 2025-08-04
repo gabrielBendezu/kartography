@@ -43,7 +43,6 @@ const useChannelSync = (channel: Channel, canvas: fabric.Canvas | null) => {
           break;
       }
     });
-    
 
     // Send brush strokes
     // TODO: Maybe make the mapcanvas have it's own shared state, including brush settings
