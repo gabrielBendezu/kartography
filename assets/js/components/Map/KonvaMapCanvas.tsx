@@ -27,9 +27,25 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef<Konva.Stage>(null);
 
+  const handleReceiveBrushstroke = (brushstrokeData: {
+    points: number[];
+    color: string;
+    width: number;
+    opacity: number;
+  }) => {
+    // Add the received brushstroke to our lines
+    const newLine: BrushLine = {
+      tool: "brush", // Default to brush tool for received strokes
+      points: brushstrokeData.points,
+      color: brushstrokeData.color,
+      width: brushstrokeData.width,
+      opacity: brushstrokeData.opacity,
+    };
+    
+    setLines(prevLines => [...prevLines, newLine]);
+  };
 
-
-  useKonvaChannelSync(channel, stageRef.current);
+  useKonvaChannelSync(channel, stageRef.current, handleReceiveBrushstroke);
 
   const handleMouseDown = (
     payload: Konva.KonvaEventObject<MouseEvent | TouchEvent>

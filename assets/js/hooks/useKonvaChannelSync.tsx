@@ -3,15 +3,21 @@ import Konva from "konva";
 
 import { useEffect } from "react";
 
-interface Payload {
-  type: string;
+interface BrushstrokePayload {
+  type: "brushstroke";
   data: {
-    path: string;
-    strokeWidth: number;
+    points: number[];
+    color: string;
+    width: number;
+    opacity: number;
   };
 }
 
-const useKonvaChannelSync = (channel: Channel, stage: Konva.Stage | null) => {
+const useKonvaChannelSync = (
+  channel: Channel,
+  stage: Konva.Stage | null,
+  onReceiveBrushstroke?: (brushstroke: BrushstrokePayload["data"]) => void
+) => {
   useEffect(() => {
     // Send action (including brushstroke)
     if (!stage) {
@@ -24,16 +30,15 @@ const useKonvaChannelSync = (channel: Channel, stage: Konva.Stage | null) => {
       console.log("saw mouseup on stage");
       if (event.target.getClassName() === "Line") {
         console.log("saw line action on stage");
+        const line = event.target as Konva.Line;
         channel.push("map_action", {
           type: "brushstroke",
           // clientID: clientId.current, Need to get this so we don't re-render everything
           data: {
-            points: event.target.getAbsolutePosition,
-            test1: "test1",
-            // color: event.target.stroke(),
-            // width: event.target.strokeWidth(),
-            opacity: event.target.opacity(),
-            test2: "test2",
+            points: line.points(),
+            color: line.stroke(),
+            width: line.strokeWidth(),
+            opacity: line.opacity(),
           },
         });
       }
@@ -45,17 +50,16 @@ const useKonvaChannelSync = (channel: Channel, stage: Konva.Stage | null) => {
       //   return; // Ignore own messages
       // } Need to do this we don't re-render everything
 
-      // Handle different types of updates
       switch (payload.type) {
         case "brushstroke":
-          // Render brush stroke from other user
-          console.log("received brushstroke");
+          console.log("received brushstroke", payload.data);
+          if (onReceiveBrushstroke) {
+            onReceiveBrushstroke(payload.data);
+          }
           break;
         case "image_drop":
-          // Handle image drop from other user
           break;
         case "layer_toggle":
-          // Handle layer visibility changes
           break;
         default:
           console.log("Unknown map update type:", payload.type);
