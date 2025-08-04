@@ -7,6 +7,7 @@ import { Channel } from "phoenix";
 import Background from "../Canvas/Background";
 import Foreground from "../Canvas/Foreground";
 import { useMapContext } from "../../contexts/MapContext";
+import useKonvaChannelSync from "../../hooks/useKonvaChannelSync";
 
 type BrushLine = {
   tool: string;
@@ -17,13 +18,18 @@ type BrushLine = {
 };
 
 interface KonvaMapCanvasProps {
-    channel: Channel;
-  }
+  channel: Channel;
+}
 
 const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
   const { activeTool, brushSettings } = useMapContext();
   const [lines, setLines] = React.useState<BrushLine[]>([]);
   const isDrawing = React.useRef(false);
+  const stageRef = React.useRef<Konva.Stage>(null);
+
+
+
+  useKonvaChannelSync(channel, stageRef.current);
 
   const handleMouseDown = (
     payload: Konva.KonvaEventObject<MouseEvent | TouchEvent>
@@ -33,13 +39,16 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
     const position = getPointerPosition(payload);
     if (!position) return;
 
-    setLines([...lines, { 
-      tool: activeTool, 
-      points: [position.x, position.y],
-      color: brushSettings.color,
-      width: brushSettings.width,
-      opacity: brushSettings.opacity
-    }]);
+    setLines([
+      ...lines,
+      {
+        tool: activeTool,
+        points: [position.x, position.y],
+        color: brushSettings.color,
+        width: brushSettings.width,
+        opacity: brushSettings.opacity,
+      },
+    ]);
   };
 
   const handleMouseMove = (
@@ -82,35 +91,37 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
   };
 
   return (
-    <Stage className="w-full h-full border border-base-300 cursor-crosshair focus:outline-2 focus:outline-info focus:outline-offset-2"
-        width={window.innerWidth}
-        height={window.innerHeight - 25}
-        onMouseDown={handleMouseDown}
-        onMousemove={handleMouseMove}
-        onMouseup={handleMouseUp}
-        onTouchStart={handleMouseDown}
-        onTouchMove={handleMouseMove}
-        onTouchEnd={handleMouseUp}
-      >
-        <Background/>
-        <Foreground>
-          {lines.map((line, i) => (
-            <Line
-              key={i}
-              points={line.points}
-              stroke={line.color}
-              strokeWidth={line.width}
-              opacity={line.opacity}
-              tension={0.5}
-              lineCap="round"
-              lineJoin="round"
-              globalCompositeOperation={
-                line.tool === "eraser" ? "destination-out" : "source-over"
-              }
-            />
-          ))}
-        </Foreground>
-      </Stage>
+    <Stage
+      ref={stageRef}
+      className="w-full h-full border border-base-300 cursor-crosshair focus:outline-2 focus:outline-info focus:outline-offset-2"
+      width={window.innerWidth}
+      height={window.innerHeight - 25}
+      onMouseDown={handleMouseDown}
+      onMousemove={handleMouseMove}
+      onMouseup={handleMouseUp}
+      onTouchStart={handleMouseDown}
+      onTouchMove={handleMouseMove}
+      onTouchEnd={handleMouseUp}
+    >
+      <Background />
+      <Foreground>
+        {lines.map((line, i) => (
+          <Line
+            key={i}
+            points={line.points}
+            stroke={line.color}
+            strokeWidth={line.width}
+            opacity={line.opacity}
+            tension={0.5}
+            lineCap="round"
+            lineJoin="round"
+            globalCompositeOperation={
+              line.tool === "eraser" ? "destination-out" : "source-over"
+            }
+          />
+        ))}
+      </Foreground>
+    </Stage>
   );
 };
 

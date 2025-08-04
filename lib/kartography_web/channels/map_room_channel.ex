@@ -36,14 +36,84 @@ defmodule KartographyWeb.MapRoomChannel do
     {:noreply, socket}
   end
 
-  # Handle input is called by pheonix channel when channel.push() is called.
-  # channel.push("new_msg", {body: chatInput.value}), here, it is chatInput.value that
-  # becomes the map
   @impl true
-  def handle_in("canvas_draw", %{"type" => "brush_stroke", "data" => data}, socket) do
-    broadcast!(socket, "canvas_update", %{type: "brush_stroke", data: data})
-    {:noreply, socket}
+  def handle_in("map_action", payload, socket) do
+    case handle_map_action(payload) do
+      {:ok, broadcast_data} ->
+        IO.puts("line 43")
+        # IO.inspect("received incoming map action with data: #{payload}")
+        broadcast!(socket, "map_update", broadcast_data)
+        {:noreply, socket}
+
+      {:error, reason} ->
+        {:reply, {:error, %{reason: reason}}, socket}
+    end
   end
+
+  # Handle specific map actions based on type
+  defp handle_map_action(%{"type" => "brushstroke", "data" => data}) do
+    # Validate brush stroke data
+    if valid_brushstroke?(data) do
+      IO.puts("testing handled map action")
+      # IO.inspect("received incoming map action with data: #{data}")
+      {:ok, %{type: "brushstroke", data: data, timestamp: DateTime.utc_now()}}
+    else
+      {:error, "invalid_brushstroke"}
+    end
+  end
+
+  defp handle_map_action(%{"type" => "image_drop", "data" => data}) do
+    # Future: Handle image dropping
+    if valid_image_data?(data) do
+      {:ok, %{type: "image_drop", data: data, timestamp: DateTime.utc_now()}}
+    else
+      {:error, "invalid_image"}
+    end
+  end
+
+  defp handle_map_action(%{"type" => "layer_toggle", "data" => data}) do
+    # Future: Handle EU4-like map mode layers
+    if valid_layer_data?(data) do
+      {:ok, %{type: "layer_toggle", data: data, timestamp: DateTime.utc_now()}}
+    else
+      {:error, "invalid_layer"}
+    end
+  end
+
+  defp handle_map_action(%{"type" => "shape_add", "data" => data}) do
+    # Future: Handle adding shapes/annotations
+    if valid_shape_data?(data) do
+      {:ok, %{type: "shape_add", data: data, timestamp: DateTime.utc_now()}}
+    else
+      {:error, "invalid_shape"}
+    end
+  end
+
+  defp handle_map_action(%{"type" => type}) do
+    {:error, "unsupported_action_type: #{type}"}
+  end
+
+  defp handle_map_action(_) do
+    {:error, "invalid_payload_format"}
+  end
+
+  # Validation functions
+  defp valid_brushstroke?(%{"points" => points, "color" => _color, "width" => width})
+    when is_list(points) and is_number(width) and width > 0, do: true
+  defp valid_brushstroke?(_), do: true # *****
+
+  defp valid_image_data?(%{"url" => url, "position" => %{"x" => x, "y" => y}})
+    when is_binary(url) and is_number(x) and is_number(y), do: true
+  defp valid_image_data?(_), do: false
+
+  defp valid_layer_data?(%{"layer_id" => id, "visible" => visible})
+    when is_binary(id) and is_boolean(visible), do: true
+  defp valid_layer_data?(_), do: false
+
+  defp valid_shape_data?(%{"shape_type" => type, "properties" => _props})
+    when type in ["rectangle", "circle", "polygon"], do: true
+  defp valid_shape_data?(_), do: false
+
 
   # Add authorization logic here
   # defp authorized?(_payload) do
