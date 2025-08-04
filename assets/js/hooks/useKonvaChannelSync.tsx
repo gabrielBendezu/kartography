@@ -13,34 +13,38 @@ interface Payload {
 
 const useKonvaChannelSync = (channel: Channel, stage: Konva.Stage | null) => {
   useEffect(() => {
-    // Receive action (including brushstrokes)
     // Send action (including brushstroke)
     if (!stage) {
-      console.log("**NO STAGE**")
+      console.log("**NO STAGE**");
       return;
-    };
-    console.log("**WE HAVE A STAGE**")
+    }
+    console.log("**WE HAVE A STAGE**");
 
     stage.on("mouseup", (event: Konva.KonvaEventObject<Event>) => {
-      console.log("saw mouseup on stage")
-      if (event.target.getClassName() === 'Line') {
-        console.log("saw line action on stage")
+      console.log("saw mouseup on stage");
+      if (event.target.getClassName() === "Line") {
+        console.log("saw line action on stage");
         channel.push("map_action", {
           type: "brushstroke",
+          // clientID: clientId.current, Need to get this so we don't re-render everything
           data: {
             points: event.target.getAbsolutePosition,
             test1: "test1",
             // color: event.target.stroke(),
             // width: event.target.strokeWidth(),
             opacity: event.target.opacity(),
-            test2: "test2"
-          }
+            test2: "test2",
+          },
         });
       }
     });
 
     // Listen for map updates from other users
     channel.on("map_update", (payload) => {
+      // if (payload.clientId === clientId.current) {
+      //   return; // Ignore own messages
+      // } Need to do this we don't re-render everything
+
       // Handle different types of updates
       switch (payload.type) {
         case "brushstroke":
