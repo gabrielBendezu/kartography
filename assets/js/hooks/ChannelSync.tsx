@@ -37,7 +37,7 @@ const ChannelSync = (
           break;
         case "image_drop":
           break;
-        case "layer_toggle":
+        case "layer_creation":
           break;
         default:
           console.log("Unknown map update type:", payload.type);
