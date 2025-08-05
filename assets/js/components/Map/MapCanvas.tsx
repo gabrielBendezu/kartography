@@ -32,7 +32,7 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
   const handleReceiveAction = React.useCallback((actionData: any) => {
     console.log("MapCanvas handleReceiveAction received:", actionData);
     
-    const toolType = (actionData.tool || "brush") as ToolType; // fallback for legacy
+    const toolType = (actionData.tool) as ToolType;
     const toolConfig = getToolHandlers[toolType];
     const toolHandlers = toolConfig?.handlers;
     
