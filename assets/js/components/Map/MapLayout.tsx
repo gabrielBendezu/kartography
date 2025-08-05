@@ -1,6 +1,6 @@
 import MapToolbar from "./MapToolbar";
 import { MapContextProvider } from "../../contexts/MapContext";
-import KonvaMapCanvas from "./MapCanvas";
+import MapCanvas from "./MapCanvas";
 
 import { Channel } from "phoenix";
 
@@ -16,7 +16,7 @@ const MapLayout = ({ channel }: MapLayoutProps) => {
           <MapToolbar />
         </div>
         <div className="flex-1 relative overflow-hidden m-12">
-          <KonvaMapCanvas channel={channel} />
+          <MapCanvas channel={channel} />
         </div>
       </div>
     </MapContextProvider>
