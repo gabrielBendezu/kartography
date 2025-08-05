@@ -53,7 +53,7 @@ export const brushTool = {
 
     const lastLine = lines[lines.length - 1];
     channel.push("map_action", {
-      type: "brushstroke",
+      type: "brush",
       data: {
         points: lastLine.points,
         color: lastLine.color,

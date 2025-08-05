@@ -1,22 +1,12 @@
 import { Channel } from "phoenix";
 import Konva from "konva";
 import React, { useEffect } from "react";
-import { ToolActionPayload } from "../components/Map/types";
-
-interface BrushstrokePayload {
-  type: "brushstroke";
-  data: {
-    points: number[];
-    color: string;
-    width: number;
-    opacity: number;
-  };
-}
+import { ToolType } from "../components/Map/types";
 
 const ChannelSync = (
   channel: Channel,
   stageRef: React.RefObject<Konva.Stage | null>,
-  onReceiveAction?: (action: ToolActionPayload) => void
+  onReceiveAction?: (payload: any) => void
 ) => {
   useEffect(() => {
     const handleMapUpdate = (payload: any) => {
@@ -27,31 +17,13 @@ const ChannelSync = (
       const stage = stageRef.current;
       if (!stage || !onReceiveAction) return; // Hmm if initial brushstrokes aren't being heard by other clients then this might be the problem
 
-      switch (payload.type) {
-        case "terrainstroke":
-          console.log("Received Terrainstroke", payload.data);
-
-          break;
-        case "brushstroke":
-          console.log("Received brushstroke", payload.data);
-          const toolAction: ToolActionPayload = {
-            type: "tool_action",
-            tool: "brush",
-            data: payload.data,
-          };
-          onReceiveAction(toolAction);
-
-          break;
-        case "object_drop":
-          console.log("Received image drop", payload.data);
-
-          break;
-        case "layer_creation":
-          console.log("Received layer creation", payload.data);
-
-          break;
-        default:
-          console.log("Unknown map update type:", payload.type);
+      const toolType = payload.type as ToolType;
+      const validToolTypes = ["select", "terrain", "brush", "text", "path", "object", "map_mode"] as const;
+      if (validToolTypes.indexOf(toolType) !== -1) {
+        console.log(`Received ${toolType}`, payload.data);
+        onReceiveAction(payload);
+      } else {
+        console.log("Unknown map update type:", payload.type);
       }
     };
 

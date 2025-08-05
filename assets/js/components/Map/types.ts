@@ -1,4 +1,4 @@
-export type ToolType = "select" | "terrain" | "brush" | "object" | "text" | "path" | "semantic_layer";
+export type ToolType = "select" | "terrain" | "brush" | "object" | "text" | "path" | "map_mode";
 
 export interface BrushConfig {
   width: number;

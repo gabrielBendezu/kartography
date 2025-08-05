@@ -29,16 +29,16 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef<Konva.Stage>(null);
 
-  const handleReceiveAction = React.useCallback((actionData: any) => {
-    console.log("MapCanvas handleReceiveAction received:", actionData);
+  const handleReceiveAction = React.useCallback((payload: any) => {
+    console.log("MapCanvas handleReceiveAction received:", payload);
     
-    const toolType = (actionData.tool) as ToolType;
+    const toolType = payload.type as ToolType;
     const toolConfig = getToolHandlers[toolType];
     const toolHandlers = toolConfig?.handlers;
     
     if (toolHandlers) {
-      console.log("Calling tool handler with data:", actionData.data);
-      toolHandlers.handleReceiveAction(actionData.data, lines, setLines);
+      console.log("Calling tool handler with data:", payload.data);
+      toolHandlers.handleReceiveAction(payload.data, lines, setLines);
     } else {
       console.warn("No handlers found for tool:", toolType);
     }

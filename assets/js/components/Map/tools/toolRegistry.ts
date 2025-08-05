@@ -25,11 +25,6 @@ export const getToolHandlers: Record<ToolType, ToolConfig> = {
     settings: BrushSettings, // Component
     defaultSettings: { color: "#000", width: 5, opacity: 1 },
   },
-  object: {
-    // handlers: brushTool,
-    // settings: BrushSettings, // Component
-    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
-  },
   text: {
     // handlers: brushTool,
     // settings: BrushSettings, // Component
@@ -40,7 +35,12 @@ export const getToolHandlers: Record<ToolType, ToolConfig> = {
     // settings: BrushSettings, // Component
     // defaultSettings: { color: "#000", width: 5, opacity: 1 },
   },
-  semantic_layer: {
+  object: {
+    // handlers: brushTool,
+    // settings: BrushSettings, // Component
+    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
+  },
+  map_mode: {
     // handlers: brushTool,
     // settings: BrushSettings, // Component
     // defaultSettings: { color: "#000", width: 5, opacity: 1 },

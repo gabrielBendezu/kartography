@@ -50,51 +50,60 @@ defmodule KartographyWeb.MapRoomChannel do
     end
   end
 
-  defp handle_map_action(%{"type" => "terrainstroke", "data" => data}) do
+  defp handle_map_action(%{"type" => "terrain", "data" => data}) do
     # Future: Handle adding shapes/annotations
     if valid_shape_data?(data) do
-      {:ok, %{type: "terrainstroke", data: data, timestamp: DateTime.utc_now()}}
+      {:ok, %{type: "terrain", data: data, timestamp: DateTime.utc_now()}}
     else
       {:error, "invalid_no_good"}
     end
   end
 
   # Handle specific map actions based on type
-  defp handle_map_action(%{"type" => "brushstroke", "data" => data}) do
+  defp handle_map_action(%{"type" => "brush", "data" => data}) do
     # Validate brush stroke data
     if valid_brushstroke?(data) do
       IO.puts("testing handled map action")
       # IO.inspect("received incoming map action with data: #{data}")
-      {:ok, %{type: "brushstroke", data: data, timestamp: DateTime.utc_now()}}
+      {:ok, %{type: "brush", data: data, timestamp: DateTime.utc_now()}}
     else
       {:error, "invalid_brushstroke"}
     end
   end
 
-  defp handle_map_action(%{"type" => "object_drop", "data" => data}) do
+  defp handle_map_action(%{"type" => "object", "data" => data}) do
     # Future: Handle image dropping
     if valid_image_data?(data) do
-      {:ok, %{type: "image_drop", data: data, timestamp: DateTime.utc_now()}}
+      {:ok, %{type: "object", data: data, timestamp: DateTime.utc_now()}}
     else
       {:error, "invalid_image"}
     end
   end
 
-  defp handle_map_action(%{"type" => "layer_creation", "data" => data}) do
+  defp handle_map_action(%{"type" => "map_mode", "data" => data}) do
     # Future: Handle EU4-like map mode layers
     if valid_layer_data?(data) do
-      {:ok, %{type: "layer_creation", data: data, timestamp: DateTime.utc_now()}}
+      {:ok, %{type: "map_mode", data: data, timestamp: DateTime.utc_now()}}
     else
       {:error, "invalid_layer"}
     end
   end
 
-  defp handle_map_action(%{"type" => "pathstroke", "data" => data}) do
-    # Future: Handle EU4-like map mode layers
+  defp handle_map_action(%{"type" => "path", "data" => data}) do
+    # Future: Handle rivers, roads, railways
     if valid_layer_data?(data) do
-      {:ok, %{type: "pathstroke", data: data, timestamp: DateTime.utc_now()}}
+      {:ok, %{type: "path", data: data, timestamp: DateTime.utc_now()}}
     else
-      {:error, "invalid_layer"}
+      {:error, "invalid_path"}
+    end
+  end
+
+  defp handle_map_action(%{"type" => "text", "data" => data}) do
+    # Future: Handle text annotations
+    if valid_text_data?(data) do
+      {:ok, %{type: "text", data: data, timestamp: DateTime.utc_now()}}
+    else
+      {:error, "invalid_text"}
     end
   end
 
@@ -122,6 +131,10 @@ defmodule KartographyWeb.MapRoomChannel do
   defp valid_shape_data?(%{"shape_type" => type, "properties" => _props})
     when type in ["rectangle", "circle", "polygon"], do: true
   defp valid_shape_data?(_), do: false
+
+  defp valid_text_data?(%{"text" => text, "position" => %{"x" => x, "y" => y}})
+    when is_binary(text) and is_number(x) and is_number(y), do: true
+  defp valid_text_data?(_), do: false
 
 
   # Add authorization logic here
