@@ -7,7 +7,7 @@ import { Channel } from "phoenix";
 import Background from "../Canvas/Background";
 import Foreground from "../Canvas/Foreground";
 import { useMapContext } from "../../contexts/MapContext";
-import useKonvaChannelSync from "../../hooks/useKonvaChannelSync";
+import useKonvaChannelSync from "../../hooks/useChannelSync";
 
 type BrushLine = {
   tool: string;
