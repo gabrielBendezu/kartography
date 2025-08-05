@@ -48,34 +48,12 @@ const useKonvaChannelSync = (
       }
     };
 
-    const handleMouseUp = (event: Konva.KonvaEventObject<Event>) => {
-      console.log("saw mouseup on stage");
-      if (event.target.getClassName() === "Line") {
-        console.log("saw line action on stage");
-        const line = event.target as Konva.Line;
-        channel.push("map_action", {
-          type: "brushstroke",
-          // clientID: clientId.current, Need to get this so we don't re-render everything
-          data: {
-            points: line.points(),
-            color: line.stroke(),
-            width: line.strokeWidth(),
-            opacity: line.opacity(),
-          },
-        });
-      }
-    };
-
     // Listen for map updates from other users
     channel.on("map_update", handleMapUpdate);
-    
-    // Listen for mouse events to send updates
-    stage.on("mouseup", handleMouseUp);
 
     // Cleanup function to remove listeners when component unmounts or stage changes
     return () => {
       channel.off("map_update");
-      stage.off("mouseup");
     };
   }, [stage, channel]);
 };

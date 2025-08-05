@@ -103,6 +103,19 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
   };
 
   const handleMouseUp = () => {
+    if (isDrawing.current && lines.length > 0) {
+      // Send the completed brushstroke to the channel
+      const lastLine = lines[lines.length - 1];
+      channel.push("map_action", {
+        type: "brushstroke",
+        data: {
+          points: lastLine.points,
+          color: lastLine.color,
+          width: lastLine.width,
+          opacity: lastLine.opacity,
+        },
+      });
+    }
     isDrawing.current = false;
   };
 
