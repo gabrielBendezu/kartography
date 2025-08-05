@@ -25,33 +25,30 @@ const ChannelSync = (
       // } Need to do this we don't re-render everything
 
       const stage = stageRef.current;
+      if (!stage || !onReceiveAction) return; // Hmm if initial brushstrokes aren't being heard by other clients then this might be the problem
 
       switch (payload.type) {
-        case "tool_action":
-          console.log("received tool action", payload);
-          if (stage && onReceiveAction) {
-            onReceiveAction(payload);
-          } else if (!stage) {
-            console.log("Stage not ready, queuing tool action");
-          }
+        case "terrainstroke":
+          console.log("Received Terrainstroke", payload.data);
+
           break;
         case "brushstroke":
-          console.log("received brushstroke (legacy)", payload.data);
-          // Legacy brushstroke support - convert to tool_action
-          if (stage && onReceiveAction) {
-            const toolAction: ToolActionPayload = {
-              type: "tool_action",
-              tool: "brush",
-              data: payload.data
-            };
-            onReceiveAction(toolAction);
-          } else if (!stage) {
-            console.log("Stage not ready, queuing brushstroke");
-          }
+          console.log("Received brushstroke", payload.data);
+          const toolAction: ToolActionPayload = {
+            type: "tool_action",
+            tool: "brush",
+            data: payload.data,
+          };
+          onReceiveAction(toolAction);
+
           break;
-        case "image_drop":
+        case "object_drop":
+          console.log("Received image drop", payload.data);
+
           break;
         case "layer_creation":
+          console.log("Received layer creation", payload.data);
+
           break;
         default:
           console.log("Unknown map update type:", payload.type);
