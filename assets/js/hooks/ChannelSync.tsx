@@ -1,7 +1,6 @@
 import { Channel } from "phoenix";
 import Konva from "konva";
-
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 interface BrushstrokePayload {
   type: "brushstroke";
@@ -13,28 +12,27 @@ interface BrushstrokePayload {
   };
 }
 
-const useKonvaChannelSync = (
+const ChannelSync = (
   channel: Channel,
-  stage: Konva.Stage | null,
+  stageRef: React.RefObject<Konva.Stage | null>,
   onReceiveBrushstroke?: (brushstroke: BrushstrokePayload["data"]) => void
 ) => {
   useEffect(() => {
-    if (!stage) {
-      console.log("**NO STAGE**");
-      return;
-    }
-    console.log("**WE HAVE A STAGE**");
-
     const handleMapUpdate = (payload: any) => {
       // if (payload.clientId === clientId.current) {
       //   return; // Ignore own messages
       // } Need to do this we don't re-render everything
 
+      const stage = stageRef.current;
+
       switch (payload.type) {
         case "brushstroke":
           console.log("received brushstroke", payload.data);
-          if (onReceiveBrushstroke) {
+          // Only process brushstrokes if we have a stage to render to
+          if (stage && onReceiveBrushstroke) {
             onReceiveBrushstroke(payload.data);
+          } else if (!stage) {
+            console.log("Stage not ready, queuing brushstroke");
           }
           break;
         case "image_drop":
@@ -51,10 +49,10 @@ const useKonvaChannelSync = (
     return () => {
       channel.off("map_update");
     };
-  }, [stage, channel]);
+  }, [channel, onReceiveBrushstroke, stageRef]);
 };
 
-export default useKonvaChannelSync;
+export default ChannelSync;
 
 /* 
   Mouse Events:

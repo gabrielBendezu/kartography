@@ -27,7 +27,7 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef<Konva.Stage>(null);
 
-  const handleReceiveBrushstroke = (brushstrokeData: {
+  const handleReceiveBrushstroke = React.useCallback((brushstrokeData: {
     points: number[];
     color: string;
     width: number;
@@ -42,9 +42,9 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
     };
 
     setLines((prevLines) => [...prevLines, newLine]);
-  };
+  }, []);
 
-  ChannelSync(channel, stageRef.current, handleReceiveBrushstroke);
+  ChannelSync(channel, stageRef, handleReceiveBrushstroke);
 
   const handleMouseDown = (
     payload: Konva.KonvaEventObject<MouseEvent | TouchEvent>
