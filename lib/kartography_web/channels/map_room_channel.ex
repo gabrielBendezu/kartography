@@ -52,7 +52,7 @@ defmodule KartographyWeb.MapRoomChannel do
 
   defp handle_map_action(%{"type" => "terrain", "data" => data}) do
     # Future: Handle adding shapes/annotations
-    if valid_shape_data?(data) do
+    if valid_object_data?(data) do
       {:ok, %{type: "terrain", data: data, timestamp: DateTime.utc_now()}}
     else
       {:error, "invalid_no_good"}
@@ -61,10 +61,7 @@ defmodule KartographyWeb.MapRoomChannel do
 
   # Handle specific map actions based on type
   defp handle_map_action(%{"type" => "brush", "data" => data}) do
-    # Validate brush stroke data
     if valid_brushstroke?(data) do
-      IO.puts("testing handled map action")
-      # IO.inspect("received incoming map action with data: #{data}")
       {:ok, %{type: "brush", data: data, timestamp: DateTime.utc_now()}}
     else
       {:error, "invalid_brushstroke"}
@@ -72,7 +69,6 @@ defmodule KartographyWeb.MapRoomChannel do
   end
 
   defp handle_map_action(%{"type" => "object", "data" => data}) do
-    # Future: Handle image dropping
     if valid_image_data?(data) do
       {:ok, %{type: "object", data: data, timestamp: DateTime.utc_now()}}
     else
@@ -81,7 +77,6 @@ defmodule KartographyWeb.MapRoomChannel do
   end
 
   defp handle_map_action(%{"type" => "map_mode", "data" => data}) do
-    # Future: Handle EU4-like map mode layers
     if valid_layer_data?(data) do
       {:ok, %{type: "map_mode", data: data, timestamp: DateTime.utc_now()}}
     else
@@ -90,7 +85,6 @@ defmodule KartographyWeb.MapRoomChannel do
   end
 
   defp handle_map_action(%{"type" => "path", "data" => data}) do
-    # Future: Handle rivers, roads, railways
     if valid_layer_data?(data) do
       {:ok, %{type: "path", data: data, timestamp: DateTime.utc_now()}}
     else
@@ -118,7 +112,7 @@ defmodule KartographyWeb.MapRoomChannel do
   # Validation functions
   defp valid_brushstroke?(%{"points" => points, "color" => _color, "width" => width})
     when is_list(points) and is_number(width) and width > 0, do: true
-  defp valid_brushstroke?(_), do: true # *****
+  defp valid_brushstroke?(_), do: false
 
   defp valid_image_data?(%{"url" => url, "position" => %{"x" => x, "y" => y}})
     when is_binary(url) and is_number(x) and is_number(y), do: true
@@ -128,9 +122,9 @@ defmodule KartographyWeb.MapRoomChannel do
     when is_binary(id) and is_boolean(visible), do: true
   defp valid_layer_data?(_), do: false
 
-  defp valid_shape_data?(%{"shape_type" => type, "properties" => _props})
-    when type in ["rectangle", "circle", "polygon"], do: true
-  defp valid_shape_data?(_), do: false
+  defp valid_object_data?(%{"layer_id" => id, "visible" => visible})
+    when is_binary(id) and is_boolean(visible), do: true
+  defp valid_object_data?(_), do: false
 
   defp valid_text_data?(%{"text" => text, "position" => %{"x" => x, "y" => y}})
     when is_binary(text) and is_number(x) and is_number(y), do: true
