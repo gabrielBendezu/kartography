@@ -7,7 +7,7 @@ import { Channel } from "phoenix";
 import Background from "../Canvas/Background";
 import Foreground from "../Canvas/Foreground";
 import { useMapContext } from "../../contexts/MapContext";
-import useKonvaChannelSync from "../../hooks/useChannelSync";
+import useKonvaChannelSync from "../../hooks/ChannelSync";
 
 type BrushLine = {
   tool: string;
@@ -33,7 +33,6 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
     width: number;
     opacity: number;
   }) => {
-    // Add the received brushstroke to our lines
     const newLine: BrushLine = {
       tool: "brush", // Default to brush tool for received strokes
       points: brushstrokeData.points,
@@ -41,8 +40,8 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
       width: brushstrokeData.width,
       opacity: brushstrokeData.opacity,
     };
-    
-    setLines(prevLines => [...prevLines, newLine]);
+
+    setLines((prevLines) => [...prevLines, newLine]);
   };
 
   useKonvaChannelSync(channel, stageRef.current, handleReceiveBrushstroke);
@@ -104,7 +103,6 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
 
   const handleMouseUp = () => {
     if (isDrawing.current && lines.length > 0) {
-      // Send the completed brushstroke to the channel
       const lastLine = lines[lines.length - 1];
       channel.push("map_action", {
         type: "brushstroke",

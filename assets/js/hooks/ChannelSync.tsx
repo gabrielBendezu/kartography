@@ -19,14 +19,12 @@ const useKonvaChannelSync = (
   onReceiveBrushstroke?: (brushstroke: BrushstrokePayload["data"]) => void
 ) => {
   useEffect(() => {
-    // Send action (including brushstroke)
     if (!stage) {
       console.log("**NO STAGE**");
       return;
     }
     console.log("**WE HAVE A STAGE**");
 
-    // Setup channel listeners immediately when stage is available
     const handleMapUpdate = (payload: any) => {
       // if (payload.clientId === clientId.current) {
       //   return; // Ignore own messages
@@ -48,10 +46,8 @@ const useKonvaChannelSync = (
       }
     };
 
-    // Listen for map updates from other users
     channel.on("map_update", handleMapUpdate);
 
-    // Cleanup function to remove listeners when component unmounts or stage changes
     return () => {
       channel.off("map_update");
     };

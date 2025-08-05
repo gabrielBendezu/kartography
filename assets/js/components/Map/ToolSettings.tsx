@@ -34,4 +34,4 @@ const ToolSettings = ({
   );
 };
 
-export default ToolSettings
+export default ToolSettings;
