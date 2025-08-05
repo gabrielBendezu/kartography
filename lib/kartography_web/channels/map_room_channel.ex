@@ -40,8 +40,7 @@ defmodule KartographyWeb.MapRoomChannel do
   def handle_in("map_action", payload, socket) do
     case handle_map_action(payload) do
       {:ok, broadcast_data} ->
-        IO.puts("line 43")
-        # IO.inspect("received incoming map action with data: #{payload}")
+        IO.puts("Incoming Map action observed")
         broadcast!(socket, "map_update", broadcast_data)
         {:noreply, socket}
 
@@ -50,8 +49,8 @@ defmodule KartographyWeb.MapRoomChannel do
     end
   end
 
+
   defp handle_map_action(%{"type" => "terrain", "data" => data}) do
-    # Future: Handle adding shapes/annotations
     if valid_object_data?(data) do
       {:ok, %{type: "terrain", data: data, timestamp: DateTime.utc_now()}}
     else
@@ -59,7 +58,6 @@ defmodule KartographyWeb.MapRoomChannel do
     end
   end
 
-  # Handle specific map actions based on type
   defp handle_map_action(%{"type" => "brush", "data" => data}) do
     if valid_brushstroke?(data) do
       {:ok, %{type: "brush", data: data, timestamp: DateTime.utc_now()}}
@@ -91,6 +89,7 @@ defmodule KartographyWeb.MapRoomChannel do
       {:error, "invalid_path"}
     end
   end
+
 
   defp handle_map_action(%{"type" => "text", "data" => data}) do
     # Future: Handle text annotations
