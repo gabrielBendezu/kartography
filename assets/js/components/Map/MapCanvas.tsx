@@ -29,7 +29,7 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef<Konva.Stage>(null);
 
-  const handleReceiveAction = React.useCallback((payload: any) => {
+  const handleReceiveAction = React.useCallback((payload: any) => { // TODO: fix this any to be something
     console.log("MapCanvas handleReceiveAction received:", payload);
     
     const toolType = payload.type as ToolType;
