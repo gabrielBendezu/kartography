@@ -7,7 +7,7 @@ import { Channel } from "phoenix";
 import Background from "../Canvas/Background";
 import Foreground from "../Canvas/Foreground";
 import { useMapContext } from "../../contexts/MapContext";
-import useKonvaChannelSync from "../../hooks/ChannelSync";
+import ChannelSync from "../../hooks/ChannelSync";
 
 type BrushLine = {
   tool: string;
@@ -17,11 +17,11 @@ type BrushLine = {
   opacity: number;
 };
 
-interface KonvaMapCanvasProps {
+interface MapCanvasProps {
   channel: Channel;
 }
 
-const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
+const MapCanvas = ({ channel }: MapCanvasProps) => {
   const { activeTool, brushSettings } = useMapContext();
   const [lines, setLines] = React.useState<BrushLine[]>([]);
   const isDrawing = React.useRef(false);
@@ -44,7 +44,7 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
     setLines((prevLines) => [...prevLines, newLine]);
   };
 
-  useKonvaChannelSync(channel, stageRef.current, handleReceiveBrushstroke);
+  ChannelSync(channel, stageRef.current, handleReceiveBrushstroke);
 
   const handleMouseDown = (
     payload: Konva.KonvaEventObject<MouseEvent | TouchEvent>
@@ -152,4 +152,4 @@ const KonvaMapCanvas = ({ channel }: KonvaMapCanvasProps) => {
   );
 };
 
-export default KonvaMapCanvas;
+export default MapCanvas;
