@@ -1,6 +1,7 @@
 import { Channel } from "phoenix";
 import Konva from "konva";
 import React, { useEffect } from "react";
+import { ToolActionPayload } from "../components/Map/types";
 
 interface BrushstrokePayload {
   type: "brushstroke";
@@ -15,7 +16,7 @@ interface BrushstrokePayload {
 const ChannelSync = (
   channel: Channel,
   stageRef: React.RefObject<Konva.Stage | null>,
-  onReceiveBrushstroke?: (brushstroke: BrushstrokePayload["data"]) => void
+  onReceiveAction?: (action: ToolActionPayload) => void
 ) => {
   useEffect(() => {
     const handleMapUpdate = (payload: any) => {
@@ -26,11 +27,24 @@ const ChannelSync = (
       const stage = stageRef.current;
 
       switch (payload.type) {
+        case "tool_action":
+          console.log("received tool action", payload);
+          if (stage && onReceiveAction) {
+            onReceiveAction(payload);
+          } else if (!stage) {
+            console.log("Stage not ready, queuing tool action");
+          }
+          break;
         case "brushstroke":
-          console.log("received brushstroke", payload.data);
-          // Only process brushstrokes if we have a stage to render to
-          if (stage && onReceiveBrushstroke) {
-            onReceiveBrushstroke(payload.data);
+          console.log("received brushstroke (legacy)", payload.data);
+          // Legacy brushstroke support - convert to tool_action
+          if (stage && onReceiveAction) {
+            const toolAction: ToolActionPayload = {
+              type: "tool_action",
+              tool: "brush",
+              data: payload.data
+            };
+            onReceiveAction(toolAction);
           } else if (!stage) {
             console.log("Stage not ready, queuing brushstroke");
           }
@@ -49,7 +63,7 @@ const ChannelSync = (
     return () => {
       channel.off("map_update");
     };
-  }, [channel, onReceiveBrushstroke, stageRef]);
+  }, [channel, onReceiveAction, stageRef]);
 };
 
 export default ChannelSync;

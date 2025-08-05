@@ -1,20 +1,48 @@
+import React from "react";
 import { ToolType } from "../types";
 import { brushTool } from "./brushTool";
+import { BrushSettings } from "../ToolbarSettings";
 
-export const getToolHandlers = (toolType: ToolType) => {
-  switch (toolType) {
-    case "brush":
-      return brushTool;
-    case "select":
-    case "terrain":
-    case "object":
-    case "text":
-    case "path":
-    case "semantic_layer":
-      // For now, return brush tool as fallback
-      // You can implement these tools later
-      return brushTool;
-    default:
-      return brushTool;
+interface ToolConfig {
+  handlers?: any;
+  settings?: React.ComponentType<any>;
+  defaultSettings?: any;
+}
+
+export const getToolHandlers: Record<ToolType, ToolConfig> = {
+  select: {
+    // handlers: brushTool,
+    // settings: BrushSettings, // Component
+    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
+  },
+  terrain: {
+    // handlers: brushTool,
+    // settings: BrushSettings, // Component
+    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
+  },
+  brush: {
+    handlers: brushTool,
+    settings: BrushSettings, // Component
+    defaultSettings: { color: "#000", width: 5, opacity: 1 },
+  },
+  object: {
+    // handlers: brushTool,
+    // settings: BrushSettings, // Component
+    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
+  },
+  text: {
+    // handlers: brushTool,
+    // settings: BrushSettings, // Component
+    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
+  },
+  path: {
+    // handlers: brushTool,
+    // settings: BrushSettings, // Component
+    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
+  },
+  semantic_layer: {
+    // handlers: brushTool,
+    // settings: BrushSettings, // Component
+    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
   }
 };

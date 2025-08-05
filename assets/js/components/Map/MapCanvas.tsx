@@ -8,6 +8,8 @@ import Background from "../Canvas/Background";
 import Foreground from "../Canvas/Foreground";
 import { useMapContext } from "../../contexts/MapContext";
 import ChannelSync from "../../hooks/ChannelSync";
+import { getToolHandlers } from "./tools/toolRegistry";
+import { ToolType } from "./types";
 
 type BrushLine = {
   tool: string;
@@ -27,92 +29,59 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef<Konva.Stage>(null);
 
-  const handleReceiveBrushstroke = React.useCallback((brushstrokeData: {
-    points: number[];
-    color: string;
-    width: number;
-    opacity: number;
-  }) => {
-    const newLine: BrushLine = {
-      tool: "brush", // Default to brush tool for received strokes
-      points: brushstrokeData.points,
-      color: brushstrokeData.color,
-      width: brushstrokeData.width,
-      opacity: brushstrokeData.opacity,
-    };
+  const handleReceiveAction = React.useCallback((actionData: any) => {
+    console.log("MapCanvas handleReceiveAction received:", actionData);
+    
+    const toolType = (actionData.tool || "brush") as ToolType; // fallback for legacy
+    const toolConfig = getToolHandlers[toolType];
+    const toolHandlers = toolConfig?.handlers;
+    
+    if (toolHandlers) {
+      console.log("Calling tool handler with data:", actionData.data);
+      toolHandlers.handleReceiveAction(actionData.data, lines, setLines);
+    } else {
+      console.warn("No handlers found for tool:", toolType);
+    }
+  }, [lines]);
 
-    setLines((prevLines) => [...prevLines, newLine]);
-  }, []);
-
-  ChannelSync(channel, stageRef, handleReceiveBrushstroke);
+  ChannelSync(channel, stageRef, handleReceiveAction);
 
   const handleMouseDown = (
-    payload: Konva.KonvaEventObject<MouseEvent | TouchEvent>
+    event: Konva.KonvaEventObject<MouseEvent | TouchEvent>
   ) => {
     isDrawing.current = true;
-
-    const position = getPointerPosition(payload);
-    if (!position) return;
-
-    setLines([
-      ...lines,
-      {
-        tool: activeTool,
-        points: [position.x, position.y],
-        color: brushSettings.color,
-        width: brushSettings.width,
-        opacity: brushSettings.opacity,
-      },
-    ]);
+    
+    const toolConfig = getToolHandlers[activeTool];
+    const toolHandlers = toolConfig?.handlers;
+    
+    if (toolHandlers) {
+      const settings = { ...toolConfig.defaultSettings, ...brushSettings };
+      toolHandlers.handleMouseDown(event, settings, lines, setLines);
+    }
   };
 
   const handleMouseMove = (
-    payload: Konva.KonvaEventObject<MouseEvent | TouchEvent>
+    event: Konva.KonvaEventObject<MouseEvent | TouchEvent>
   ) => {
     if (!isDrawing.current) return;
-
-    const position = getPointerPosition(payload);
-    if (!position) return;
-
-    // To draw line
-    let lastLine = lines[lines.length - 1];
-    // add point
-    lastLine.points = lastLine.points.concat([position.x, position.y]);
-
-    // replace last
-    lines.splice(lines.length - 1, 1, lastLine);
-    setLines(lines.concat());
+    
+    const toolConfig = getToolHandlers[activeTool];
+    const toolHandlers = toolConfig?.handlers;
+    
+    if (toolHandlers) {
+      toolHandlers.handleMouseMove(event, lines, setLines);
+    }
   };
 
-  const getPointerPosition = (
-    payload: Konva.KonvaEventObject<MouseEvent | TouchEvent>
-  ): Konva.Vector2d | null => {
-    const stage = payload.target.getStage();
-    if (!stage) {
-      console.warn("Stage not found", payload);
-      return null;
-    }
-    const position = stage.getPointerPosition();
-    if (!position) {
-      console.warn("Position unavailable");
-      return null;
-    }
-
-    return position;
-  };
 
   const handleMouseUp = () => {
-    if (isDrawing.current && lines.length > 0) {
-      const lastLine = lines[lines.length - 1];
-      channel.push("map_action", {
-        type: "brushstroke",
-        data: {
-          points: lastLine.points,
-          color: lastLine.color,
-          width: lastLine.width,
-          opacity: lastLine.opacity,
-        },
-      });
+    if (isDrawing.current) {
+      const toolConfig = getToolHandlers[activeTool];
+      const toolHandlers = toolConfig?.handlers;
+      
+      if (toolHandlers) {
+        toolHandlers.handleMouseUp(channel, lines);
+      }
     }
     isDrawing.current = false;
   };

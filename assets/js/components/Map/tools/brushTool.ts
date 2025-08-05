@@ -53,8 +53,7 @@ export const brushTool = {
 
     const lastLine = lines[lines.length - 1];
     channel.push("map_action", {
-      type: "tool_action",
-      tool: "brush",
+      type: "brushstroke",
       data: {
         points: lastLine.points,
         color: lastLine.color,
@@ -69,6 +68,13 @@ export const brushTool = {
     _lines: BrushLine[],
     setLines: React.Dispatch<React.SetStateAction<BrushLine[]>>
   ) => {
+    console.log("brushTool handleReceiveAction received data:", data);
+    
+    if (!data || !data.points) {
+      console.warn("Invalid brush data received:", data);
+      return;
+    }
+
     const newLine: BrushLine = {
       tool: "brush",
       points: data.points,
