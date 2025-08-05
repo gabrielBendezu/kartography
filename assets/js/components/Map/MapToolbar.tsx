@@ -96,10 +96,10 @@ const MapToolbar = () => {
 
           <button
             className={`btn btn-square btn-md tooltip tooltip-right ${
-              activeTool === "semantic_layer" ? "btn-primary" : "btn-ghost"
+              activeTool === "map_mode" ? "btn-primary" : "btn-ghost"
             }`}
-            onClick={(e) => handleToolClick("semantic_layer", e)}
-            data-tip="Semantic layers"
+            onClick={(e) => handleToolClick("map_mode", e)}
+            data-tip="Map Modes"
           >
             <span className="hero-rectangle-stack bg-current size-6"></span>
           </button>

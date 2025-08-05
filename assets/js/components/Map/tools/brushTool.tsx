@@ -3,7 +3,7 @@ import Konva from "konva";
 import { Channel } from "phoenix";
 import { BrushConfig, BrushLine } from "../types";
 
-export const brushTool = {
+const brushTool = {
   handleMouseDown: (
     event: Konva.KonvaEventObject<MouseEvent | TouchEvent>,
     brushSettings: BrushConfig,
@@ -45,10 +45,7 @@ export const brushTool = {
     setLines(newLines);
   },
 
-  handleMouseUp: (
-    channel: Channel,
-    lines: BrushLine[]
-  ) => {
+  handleMouseUp: (channel: Channel, lines: BrushLine[]) => {
     if (lines.length === 0) return;
 
     const lastLine = lines[lines.length - 1];
@@ -69,7 +66,7 @@ export const brushTool = {
     setLines: React.Dispatch<React.SetStateAction<BrushLine[]>>
   ) => {
     console.log("brushTool handleReceiveAction received data:", data);
-    
+
     if (!data || !data.points) {
       console.warn("Invalid brush data received:", data);
       return;
@@ -102,3 +99,5 @@ const getPointerPosition = (
   }
   return position;
 };
+
+export default brushTool;

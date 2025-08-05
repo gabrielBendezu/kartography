@@ -1,6 +1,7 @@
 import React from "react";
 import { ToolType } from "../types";
-import { brushTool } from "./brushTool";
+import brushTool from "./brushTool";
+import terrainTool from "./terrainTool";
 import { BrushSettings } from "../ToolbarSettings";
 
 interface ToolConfig {
@@ -16,7 +17,7 @@ export const getToolHandlers: Record<ToolType, ToolConfig> = {
     // defaultSettings: { color: "#000", width: 5, opacity: 1 },
   },
   terrain: {
-    // handlers: brushTool,
+    handlers: terrainTool,
     // settings: BrushSettings, // Component
     // defaultSettings: { color: "#000", width: 5, opacity: 1 },
   },
