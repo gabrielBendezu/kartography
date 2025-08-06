@@ -15,12 +15,12 @@ export const getToolHandlers: Record<ToolType, ToolConfig> = {
   terrain: {
     handlers: terrainTool,
     settings: TerrainSettings,
-    defaultSettings: { color: "#0F0", width: 20, opacity: 1 },
+    defaultSettings: { color: "#00FF00", width: 20, opacity: 1 },
   },
   brush: {
     handlers: brushTool,
     settings: BrushSettings,
-    defaultSettings: { color: "#000", width: 10, opacity: 1 },
+    defaultSettings: { color: "#119900", width: 10, opacity: 1 },
   },
   text: {},
   path: {},

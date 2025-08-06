@@ -1,6 +1,6 @@
 import Konva from "konva";
 import React from "react";
-import { Stage, Layer, Line } from "react-konva";
+import { Stage, Line } from "react-konva";
 
 import { Channel } from "phoenix";
 
@@ -24,25 +24,31 @@ interface MapCanvasProps {
 }
 
 const MapCanvas = ({ channel }: MapCanvasProps) => {
-  const { activeTool, brushSettings } = useMapContext();
+  const { activeTool, getActiveToolSettings } = useMapContext();
   const [lines, setLines] = React.useState<BrushLine[]>([]);
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef<Konva.Stage>(null);
+  const processingQueue = React.useRef(false);
+  const actionQueue = React.useRef<any[]>([]);
 
-  const handleReceiveAction = React.useCallback((payload: any) => { // TODO: fix this any to be something
-    console.log("MapCanvas handleReceiveAction received:", payload);
-    
-    const toolType = payload.type as ToolType;
-    const toolConfig = getToolHandlers[toolType];
-    const toolHandlers = toolConfig?.handlers;
-    
-    if (toolHandlers) {
-      console.log("Calling tool handler with data:", payload.data);
-      toolHandlers.handleReceiveAction(payload.data, lines, setLines);
-    } else {
-      console.warn("No handlers found for tool:", toolType);
-    }
-  }, [lines]);
+  const handleReceiveAction = React.useCallback(
+    (payload: any) => {
+      // TODO: fix this any to be something
+      console.log("MapCanvas handleReceiveAction received:", payload);
+
+      const toolType = payload.type as ToolType;
+      const toolConfig = getToolHandlers[toolType];
+      const toolHandlers = toolConfig?.handlers;
+
+      if (toolHandlers) {
+        console.log("Calling tool handler with data:", payload.data);
+        toolHandlers.handleReceiveAction(payload.data, lines, setLines);
+      } else {
+        console.warn("No handlers found for tool:", toolType);
+      }
+    },
+    [lines]
+  );
 
   ChannelSync(channel, stageRef, handleReceiveAction);
 
@@ -50,13 +56,13 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
     event: Konva.KonvaEventObject<MouseEvent | TouchEvent>
   ) => {
     isDrawing.current = true;
-    
+
     const toolConfig = getToolHandlers[activeTool];
     const toolHandlers = toolConfig?.handlers;
-    
+
     if (toolHandlers) {
-      const settings = { ...toolConfig.defaultSettings, ...brushSettings };
-      toolHandlers.handleMouseDown(event, settings, lines, setLines);
+      const currentSettings = getActiveToolSettings();
+      toolHandlers.handleMouseDown(event, currentSettings, lines, setLines);
     }
   };
 
@@ -64,21 +70,20 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
     event: Konva.KonvaEventObject<MouseEvent | TouchEvent>
   ) => {
     if (!isDrawing.current) return;
-    
+
     const toolConfig = getToolHandlers[activeTool];
     const toolHandlers = toolConfig?.handlers;
-    
+
     if (toolHandlers) {
       toolHandlers.handleMouseMove(event, lines, setLines);
     }
   };
 
-
   const handleMouseUp = () => {
     if (isDrawing.current) {
       const toolConfig = getToolHandlers[activeTool];
       const toolHandlers = toolConfig?.handlers;
-      
+
       if (toolHandlers) {
         toolHandlers.handleMouseUp(channel, lines);
       }

@@ -2,11 +2,19 @@ import { useMapContext } from "../../../contexts/MapContext";
 import { BrushConfig } from "../types";
 
 const BrushSettings = () => {
-  const { brushSettings, setBrushSettings } = useMapContext();
+  const { getActiveToolSettings, setToolSettings, activeTool } =
+    useMapContext();
+  const brushSettings = getActiveToolSettings() as BrushConfig;
 
-  const handleBrushChange = (key: keyof BrushConfig, value: number | string) => {
+  const handleBrushChange = (
+    key: keyof BrushConfig,
+    value: number | string
+  ) => {
     const newSettings = { ...brushSettings, [key]: value };
-    setBrushSettings(newSettings);
+
+    console.log("handleBrushChange called");
+
+    setToolSettings(activeTool, newSettings);
   };
 
   return (
@@ -49,7 +57,9 @@ const BrushSettings = () => {
           step="0.1"
           value={brushSettings.opacity}
           className="range range-primary range-xs"
-          onChange={(e) => handleBrushChange("opacity", parseFloat(e.target.value))}
+          onChange={(e) =>
+            handleBrushChange("opacity", parseFloat(e.target.value))
+          }
         />
         <span className="text-xs text-base-content/70 text-center mt-1">
           {Math.round(brushSettings.opacity * 100)}%

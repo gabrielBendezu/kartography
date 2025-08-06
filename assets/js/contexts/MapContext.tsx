@@ -1,12 +1,16 @@
 import React, { createContext, useContext, useState } from "react";
-import { ToolType, BrushConfig } from "../components/Map/types";
-import { getToolHandlers } from "../components/Map/tools/toolRegistry";
+import { ToolType, ToolSettings } from "../components/Map/types";
+import {
+  getToolHandlers,
+  getDefaultSettingsForTool,
+} from "../components/Map/tools/toolRegistry";
 
 interface MapContextType {
   activeTool: ToolType;
-  brushSettings: BrushConfig;
+  toolSettings: ToolSettings;
   setActiveTool: (tool: ToolType) => void;
-  setBrushSettings: (settings: BrushConfig) => void;
+  setToolSettings: (tool: ToolType, settings: any) => void;
+  getActiveToolSettings: () => any;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
@@ -25,17 +29,34 @@ interface MapContextProviderProps {
 
 export const MapContextProvider = ({ children }: MapContextProviderProps) => {
   const [activeTool, setActiveTool] = useState<ToolType>("brush");
-  const [brushSettings, setBrushSettings] = useState<BrushConfig>({
-    width: 5,
-    color: "#000000",
-    opacity: 1,
+
+  // Initialize with defaults for all tools
+  const [toolSettings, setToolSettings] = useState<ToolSettings>(() => {
+    const settings: ToolSettings = {} as ToolSettings;
+    Object.keys(getToolHandlers).forEach((tool) => {
+      const defaultSettings = getDefaultSettingsForTool(tool as ToolType);
+      if (defaultSettings) {
+        settings[tool as ToolType] = defaultSettings;
+      }
+    });
+    return settings;
   });
+
+  const updateToolSettings = (tool: ToolType, newSettings: any) => {
+    setToolSettings((prev) => ({
+      ...prev,
+      [tool]: newSettings,
+    }));
+  };
+
+  const getActiveToolSettings = () => toolSettings[activeTool];
 
   const value = {
     activeTool,
-    brushSettings,
+    toolSettings,
     setActiveTool,
-    setBrushSettings,
+    setToolSettings: updateToolSettings,
+    getActiveToolSettings,
   };
 
   return <MapContext.Provider value={value}>{children}</MapContext.Provider>;

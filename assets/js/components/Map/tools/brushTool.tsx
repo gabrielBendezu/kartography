@@ -49,14 +49,23 @@ const brushTool = {
     if (lines.length === 0) return;
 
     const lastLine = lines[lines.length - 1];
+    const brushData = {
+      points: lastLine.points,
+      color: lastLine.color,
+      width: lastLine.width,
+      opacity: lastLine.opacity,
+    };
+
+    console.log("SENDING brushstroke:", {
+      pointCount: brushData.points.length / 2,
+      color: brushData.color,
+      width: brushData.width,
+      timestamp: Date.now(),
+    });
+
     channel.push("map_action", {
       type: "brush",
-      data: {
-        points: lastLine.points,
-        color: lastLine.color,
-        width: lastLine.width,
-        opacity: lastLine.opacity,
-      },
+      data: brushData,
     });
   },
 
@@ -65,7 +74,12 @@ const brushTool = {
     _lines: BrushLine[],
     setLines: React.Dispatch<React.SetStateAction<BrushLine[]>>
   ) => {
-    console.log("brushTool handleReceiveAction received data:", data);
+    console.log("RECEIVED brushstroke:", {
+      pointCount: data.points ? data.points.length / 2 : 0,
+      color: data.color,
+      width: data.width,
+      timestamp: Date.now(),
+    });
 
     if (!data || !data.points) {
       console.warn("Invalid brush data received:", data);
@@ -80,7 +94,10 @@ const brushTool = {
       opacity: data.opacity,
     };
 
-    setLines((prevLines) => [...prevLines, newLine]);
+    setLines((prevLines) => {
+      console.log(`Adding stroke to ${prevLines.length} existing lines`);
+      return [...prevLines, newLine];
+    });
   },
 };
 
