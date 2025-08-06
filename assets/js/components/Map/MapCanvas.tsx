@@ -31,23 +31,37 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
   const processingQueue = React.useRef(false);
   const actionQueue = React.useRef<any[]>([]);
 
-  const handleReceiveAction = React.useCallback(
-    (payload: any) => {
-      // TODO: fix this any to be something
-      console.log("MapCanvas handleReceiveAction received:", payload);
-
+  const processActionQueue = React.useCallback(async () => {
+    if (processingQueue.current || actionQueue.current.length === 0) return;
+    
+    processingQueue.current = true;
+    
+    while (actionQueue.current.length > 0) {
+      const payload = actionQueue.current.shift();
+      
       const toolType = payload.type as ToolType;
       const toolConfig = getToolHandlers[toolType];
       const toolHandlers = toolConfig?.handlers;
 
       if (toolHandlers) {
-        console.log("Calling tool handler with data:", payload.data);
-        toolHandlers.handleReceiveAction(payload.data, lines, setLines);
-      } else {
-        console.warn("No handlers found for tool:", toolType);
+        console.log("Processing queued action:", payload.data);
+        await new Promise(resolve => {
+          toolHandlers.handleReceiveAction(payload.data, lines, setLines);
+          setTimeout(resolve, 0); // Allow React to process state update
+        });
       }
+    }
+    
+    processingQueue.current = false;
+  }, [lines]);
+
+  const handleReceiveAction = React.useCallback(
+    (payload: any) => {
+      console.log("Queueing action:", payload);
+      actionQueue.current.push(payload);
+      processActionQueue();
     },
-    [lines]
+    [processActionQueue]
   );
 
   ChannelSync(channel, stageRef, handleReceiveAction);
