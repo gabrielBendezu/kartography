@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
-import { ToolType } from "../components/Map/types";
-import { BrushConfig } from "../components/Map/types";
+import { ToolType, BrushConfig } from "../components/Map/types";
+import { getToolHandlers } from "../components/Map/tools/toolRegistry";
 
 interface MapContextType {
   activeTool: ToolType;

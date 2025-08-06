@@ -2,7 +2,7 @@ import React from "react";
 import { ToolType } from "../types";
 import brushTool from "./brushTool";
 import terrainTool from "./terrainTool";
-import { BrushSettings } from "../ToolbarSettings";
+import { BrushSettings, TerrainSettings } from "../ToolbarSettings";
 
 interface ToolConfig {
   handlers?: any;
@@ -11,39 +11,25 @@ interface ToolConfig {
 }
 
 export const getToolHandlers: Record<ToolType, ToolConfig> = {
-  select: {
-    // handlers: brushTool,
-    // settings: BrushSettings, // Component
-    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
-  },
+  select: {},
   terrain: {
     handlers: terrainTool,
-    // settings: BrushSettings, // Component
-    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
+    settings: TerrainSettings,
+    defaultSettings: { color: "#0F0", width: 20, opacity: 1 },
   },
   brush: {
     handlers: brushTool,
-    settings: BrushSettings, // Component
-    defaultSettings: { color: "#000", width: 5, opacity: 1 },
+    settings: BrushSettings,
+    defaultSettings: { color: "#000", width: 10, opacity: 1 },
   },
-  text: {
-    // handlers: brushTool,
-    // settings: BrushSettings, // Component
-    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
-  },
-  path: {
-    // handlers: brushTool,
-    // settings: BrushSettings, // Component
-    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
-  },
-  object: {
-    // handlers: brushTool,
-    // settings: BrushSettings, // Component
-    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
-  },
-  map_mode: {
-    // handlers: brushTool,
-    // settings: BrushSettings, // Component
-    // defaultSettings: { color: "#000", width: 5, opacity: 1 },
-  }
+  text: {},
+  path: {},
+  object: {},
+  map_mode: {},
 };
+
+export const getDefaultSettingsForTool = (tool: ToolType) =>
+  getToolHandlers[tool].defaultSettings;
+
+export const getSettingsComponentForTool = (tool: ToolType) =>
+  getToolHandlers[tool].settings;

@@ -1,4 +1,25 @@
-export type ToolType = "select" | "terrain" | "brush" | "object" | "text" | "path" | "map_mode";
+export type ToolType =
+  | "select"
+  | "terrain"
+  | "brush"
+  | "object"
+  | "text"
+  | "path"
+  | "map_mode";
+
+export type ToolSettings = Record<ToolType, any>;
+
+export type SettingsForTool<T extends ToolType> = T extends "terrain"
+  ? TerrainConfig
+  : T extends "brush"
+  ? BrushConfig
+  : any;
+
+export interface TerrainConfig {
+  width: number;
+  color: string;
+  opacity: number;
+}
 
 export interface BrushConfig {
   width: number;
