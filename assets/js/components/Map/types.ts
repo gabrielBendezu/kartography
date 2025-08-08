@@ -27,17 +27,12 @@ export interface BrushConfig {
   opacity: number;
 }
 
-export interface BrushLine {
+export interface BrushLine { // Make this more generic?
   tool: string;
   points: number[];
   color: string;
   width: number;
   opacity: number;
-}
-
-export interface BrushSettingsProps {
-  settings: BrushConfig;
-  onChange: (field: keyof BrushConfig, value: number | string) => void;
 }
 
 export interface ToolActionPayload {
