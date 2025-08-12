@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import ToolSettings from "./ToolSettings";
 import { BrushSettings } from "./ToolbarSettings";
+import TerrainSettings from "./ToolBarSettings/TerrainSettings";
 import { useMapContext } from "../../contexts/MapContext";
 
 import { ToolType } from "./types";
@@ -111,8 +112,13 @@ const MapToolbar = () => {
         onClose={() => setShowSettings(false)}
         position={settingsPosition}
       >
+        {activeTool === "select" && <TerrainSettings />}
+        {activeTool === "terrain" && <TerrainSettings />}
         {activeTool === "brush" && <BrushSettings />}
-        {/* Other tool settings */}
+        {activeTool === "object" && <TerrainSettings />}
+        {activeTool === "text" && <TerrainSettings />}
+        {activeTool === "path" && <TerrainSettings />}
+        {activeTool === "map_mode" && <TerrainSettings />}
       </ToolSettings>
     </>
   );

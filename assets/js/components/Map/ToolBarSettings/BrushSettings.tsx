@@ -4,13 +4,13 @@ import { BrushConfig } from "../types";
 const BrushSettings = () => {
   const { getActiveToolSettings, setToolSettings, activeTool } =
     useMapContext();
-  const brushSettings = getActiveToolSettings() as BrushConfig;
+  const brushConfig = getActiveToolSettings() as BrushConfig;
 
   const handleBrushChange = (
     key: keyof BrushConfig,
     value: number | string
   ) => {
-    const newSettings = { ...brushSettings, [key]: value };
+    const newSettings = { ...brushConfig, [key]: value };
 
     console.log("handleBrushChange called");
 
@@ -27,12 +27,12 @@ const BrushSettings = () => {
           type="range"
           min="1"
           max="50"
-          value={brushSettings.width}
+          value={brushConfig.width}
           className="range range-primary range-xs"
           onChange={(e) => handleBrushChange("width", parseInt(e.target.value))}
         />
         <span className="text-xs text-base-content/70 text-center mt-1">
-          {brushSettings.width}px
+          {brushConfig.width}px
         </span>
       </div>
       <div className="form-control">
@@ -41,7 +41,7 @@ const BrushSettings = () => {
         </label>
         <input
           type="color"
-          value={brushSettings.color}
+          value={brushConfig.color}
           className="w-8 h-8 rounded border border-base-300 cursor-pointer mx-auto"
           onChange={(e) => handleBrushChange("color", e.target.value)}
         />
@@ -55,14 +55,14 @@ const BrushSettings = () => {
           min="0.1"
           max="1"
           step="0.1"
-          value={brushSettings.opacity}
+          value={brushConfig.opacity}
           className="range range-primary range-xs"
           onChange={(e) =>
             handleBrushChange("opacity", parseFloat(e.target.value))
           }
         />
         <span className="text-xs text-base-content/70 text-center mt-1">
-          {Math.round(brushSettings.opacity * 100)}%
+          {Math.round(brushConfig.opacity * 100)}%
         </span>
       </div>
     </div>

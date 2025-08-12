@@ -1,7 +1,19 @@
 import { useMapContext } from "../../../contexts/MapContext";
+import { TerrainConfig } from "../types";
 
 const TerrainSettings = () => {
+  const { getActiveToolSettings, setToolSettings, activeTool } =
+    useMapContext();
+  const terrainConfig = getActiveToolSettings() as TerrainConfig;
 
+  const handleTerrainChange = (
+    key: keyof TerrainConfig,
+    value: number | string
+  ) => {
+    const newSettings = { ...terrainConfig, [key]: value };
+
+    setToolSettings(activeTool, newSettings);
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -13,12 +25,14 @@ const TerrainSettings = () => {
           type="range"
           min="1"
           max="50"
-          value={brushSettings.width}
+          value={terrainConfig.width}
           className="range range-primary range-xs"
-          onChange={(e) => handleBrushChange("width", parseInt(e.target.value))}
+          onChange={(e) =>
+            handleTerrainChange("width", parseInt(e.target.value))
+          }
         />
         <span className="text-xs text-base-content/70 text-center mt-1">
-          {brushSettings.width}px
+          {terrainConfig.width}px
         </span>
       </div>
       <div className="form-control">
@@ -27,9 +41,9 @@ const TerrainSettings = () => {
         </label>
         <input
           type="color"
-          value={brushSettings.color}
+          value={terrainConfig.color}
           className="w-8 h-8 rounded border border-base-300 cursor-pointer mx-auto"
-          onChange={(e) => handleBrushChange("color", e.target.value)}
+          onChange={(e) => handleTerrainChange("color", e.target.value)}
         />
       </div>
       <div className="form-control">
@@ -41,14 +55,14 @@ const TerrainSettings = () => {
           min="0.1"
           max="1"
           step="0.1"
-          value={brushSettings.opacity}
+          value={terrainConfig.opacity}
           className="range range-primary range-xs"
           onChange={(e) =>
-            handleBrushChange("opacity", parseFloat(e.target.value))
+            handleTerrainChange("opacity", parseFloat(e.target.value))
           }
         />
         <span className="text-xs text-base-content/70 text-center mt-1">
-          {Math.round(brushSettings.opacity * 100)}%
+          {Math.round(terrainConfig.opacity * 100)}%
         </span>
       </div>
     </div>

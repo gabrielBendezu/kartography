@@ -25,7 +25,7 @@ export interface BrushConfig {
   width: number;
   color: string;
   opacity: number;
-}
+} 
 
 export interface BrushLine { // Make this more generic?
   tool: string;
