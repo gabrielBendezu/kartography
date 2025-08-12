@@ -1,4 +1,4 @@
-import { Channel, Socket } from "phoenix"
+import { Channel, Socket } from "phoenix";
 
 // Define types for Phoenix responses
 interface JoinResponse {
@@ -17,29 +17,30 @@ interface ErrorResponse {
 //
 // Read the [`Using Token Authentication`](https://hexdocs.pm/phoenix/channels.html#using-token-authentication)
 // section to see how the token should be used.
-console.log("Starting socket connection...")
+console.log("Starting socket connection...");
 
-const socket: Socket = new Socket("/socket", {})
+const socket: Socket = new Socket("/socket", {});
 
-socket.onOpen((): void => console.log("Socket connected!"))
-socket.onError((): void => console.log("Socket connection error!"))
-socket.onClose((): void => console.log("Socket closed!"))
+socket.onOpen((): void => console.log("Socket connected!"));
+socket.onError((): void => console.log("Socket connection error!"));
+socket.onClose((): void => console.log("Socket closed!"));
 
-socket.connect()
+socket.connect();
 
 // Now that you are connected, you can join channels with a topic.
 // Let's assume you have a channel with a topic named `room` and the
 // subtopic is its id - in this case 1:
-console.log("Attempting to join channel map_room:1...")
+console.log("Attempting to join channel map_room:1...");
 
-const channel: Channel = socket.channel("map_room:1", {})
+const channel: Channel = socket.channel("map_room:1", {});
 
-channel.join()
-  .receive("ok", (resp: JoinResponse): void => { 
-    console.log("Joined successfully", resp) 
+channel
+  .join()
+  .receive("ok", (resp: JoinResponse): void => {
+    console.log("Joined successfully", resp);
   })
-  .receive("error", (resp: ErrorResponse): void => { 
-    console.log("Unable to join", resp) 
-  })
+  .receive("error", (resp: ErrorResponse): void => {
+    console.log("Unable to join", resp);
+  });
 
-export default { channel, socket }
+export default { channel, socket };

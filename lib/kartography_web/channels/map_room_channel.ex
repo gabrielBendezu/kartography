@@ -40,7 +40,7 @@ defmodule KartographyWeb.MapRoomChannel do
   def handle_in("map_action", payload, socket) do
     case handle_map_action(payload) do
       {:ok, broadcast_data} ->
-        IO.puts("Incoming Map action observed")
+        Logger.debug("Incoming map action observed")
         broadcast!(socket, "map_update", broadcast_data)
         {:noreply, socket}
 
@@ -49,7 +49,7 @@ defmodule KartographyWeb.MapRoomChannel do
     end
   end
 
-
+  ## MAP ACTIONS
   defp handle_map_action(%{"type" => "terrain", "data" => data}) do
     if valid_object_data?(data) do
       {:ok, %{type: "terrain", data: data, timestamp: DateTime.utc_now()}}

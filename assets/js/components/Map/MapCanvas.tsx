@@ -33,25 +33,25 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
 
   const processActionQueue = React.useCallback(async () => {
     if (processingQueue.current || actionQueue.current.length === 0) return;
-    
+
     processingQueue.current = true;
-    
+
     while (actionQueue.current.length > 0) {
       const payload = actionQueue.current.shift();
-      
+
       const toolType = payload.type as ToolType;
       const toolConfig = getToolHandlers[toolType];
       const toolHandlers = toolConfig?.handlers;
 
       if (toolHandlers) {
         console.log("Processing queued action:", payload.data);
-        await new Promise(resolve => {
+        await new Promise((resolve) => {
           toolHandlers.handleReceiveAction(payload.data, lines, setLines);
           setTimeout(resolve, 0); // Allow React to process state update
         });
       }
     }
-    
+
     processingQueue.current = false;
   }, [lines]);
 
