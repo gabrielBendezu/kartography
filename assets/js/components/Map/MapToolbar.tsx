@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import ToolSettings from "./ToolSettings";
-import { BrushSettings } from "./ToolbarSettings";
-import TerrainSettings from "./ToolBarSettings/TerrainSettings";
+import { BrushSettings, TerrainSettings } from "./ToolbarSettings";
 import { useMapContext } from "../../contexts/MapContext";
 
 import { ToolType } from "./types";
