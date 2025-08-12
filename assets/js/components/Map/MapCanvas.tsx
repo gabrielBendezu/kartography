@@ -9,15 +9,7 @@ import Foreground from "../Canvas/Foreground";
 import { useMapContext } from "../../contexts/MapContext";
 import ChannelSync from "../../hooks/ChannelSync";
 import { getToolHandlers } from "./tools/toolRegistry";
-import { ToolType } from "./types";
-
-type BrushLine = {
-  tool: string;
-  points: number[];
-  color: string;
-  width: number;
-  opacity: number;
-};
+import { ToolType, BrushLine } from "./types";
 
 interface MapCanvasProps {
   channel: Channel;

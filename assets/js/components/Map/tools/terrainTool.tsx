@@ -65,7 +65,7 @@ const terrainTool = {
       color: terrainData.color,
       width: terrainData.width,
       timestamp: Date.now(),
-      channel: channel,
+      channel: channel.topic
     });
 
     channel.push("map_action", {

@@ -61,6 +61,7 @@ const brushTool = {
       color: brushData.color,
       width: brushData.width,
       timestamp: Date.now(),
+      channel: channel.topic
     });
 
     channel.push("map_action", {

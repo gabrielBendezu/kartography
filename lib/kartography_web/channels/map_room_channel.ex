@@ -38,9 +38,9 @@ defmodule KartographyWeb.MapRoomChannel do
 
   @impl true
   def handle_in("map_action", payload, socket) do
+    Logger.debug("Incoming map action observed")
     case handle_map_action(payload) do
       {:ok, broadcast_data} ->
-        Logger.debug("Incoming map action observed")
         broadcast!(socket, "map_update", broadcast_data)
         {:noreply, socket}
 
@@ -51,7 +51,8 @@ defmodule KartographyWeb.MapRoomChannel do
 
   ## MAP ACTIONS
   defp handle_map_action(%{"type" => "terrain", "data" => data}) do
-    if valid_object_data?(data) do
+    Logger.debug("Incoming terrain action observed")
+    if valid_terrainstroke?(data) do
       {:ok, %{type: "terrain", data: data, timestamp: DateTime.utc_now()}}
     else
       {:error, "invalid_no_good"}
@@ -67,36 +68,35 @@ defmodule KartographyWeb.MapRoomChannel do
   end
 
   defp handle_map_action(%{"type" => "object", "data" => data}) do
-    if valid_image_data?(data) do
+    if valid_object?(data) do
       {:ok, %{type: "object", data: data, timestamp: DateTime.utc_now()}}
     else
       {:error, "invalid_image"}
     end
   end
 
-  defp handle_map_action(%{"type" => "map_mode", "data" => data}) do
-    if valid_layer_data?(data) do
-      {:ok, %{type: "map_mode", data: data, timestamp: DateTime.utc_now()}}
+  defp handle_map_action(%{"type" => "text", "data" => data}) do
+    # Future: Handle text annotations
+    if valid_text?(data) do
+      {:ok, %{type: "text", data: data, timestamp: DateTime.utc_now()}}
     else
-      {:error, "invalid_layer"}
+      {:error, "invalid_text"}
     end
   end
 
   defp handle_map_action(%{"type" => "path", "data" => data}) do
-    if valid_layer_data?(data) do
+    if valid_path?(data) do
       {:ok, %{type: "path", data: data, timestamp: DateTime.utc_now()}}
     else
       {:error, "invalid_path"}
     end
   end
 
-
-  defp handle_map_action(%{"type" => "text", "data" => data}) do
-    # Future: Handle text annotations
-    if valid_text_data?(data) do
-      {:ok, %{type: "text", data: data, timestamp: DateTime.utc_now()}}
+  defp handle_map_action(%{"type" => "map_mode", "data" => data}) do
+    if valid_layer?(data) do
+      {:ok, %{type: "map_mode", data: data, timestamp: DateTime.utc_now()}}
     else
-      {:error, "invalid_text"}
+      {:error, "invalid_layer"}
     end
   end
 
@@ -109,25 +109,29 @@ defmodule KartographyWeb.MapRoomChannel do
   end
 
   # Validation functions
+  defp valid_terrainstroke?(%{"points" => points, "color" => _color, "width" => width})
+    when is_list(points) and is_number(width) and width > 0, do: true
+  defp valid_terrainstroke?(_), do: false
+
   defp valid_brushstroke?(%{"points" => points, "color" => _color, "width" => width})
     when is_list(points) and is_number(width) and width > 0, do: true
   defp valid_brushstroke?(_), do: false
 
-  defp valid_image_data?(%{"url" => url, "position" => %{"x" => x, "y" => y}})
-    when is_binary(url) and is_number(x) and is_number(y), do: true
-  defp valid_image_data?(_), do: false
+  defp valid_object?(%{"layer_id" => id, "visible" => visible})
+  when is_binary(id) and is_boolean(visible), do: true
+  defp valid_object?(_), do: false
 
-  defp valid_layer_data?(%{"layer_id" => id, "visible" => visible})
+  defp valid_path?(%{"layer_id" => id, "visible" => visible})
     when is_binary(id) and is_boolean(visible), do: true
-  defp valid_layer_data?(_), do: false
+  defp valid_path?(_), do: false
 
-  defp valid_object_data?(%{"layer_id" => id, "visible" => visible})
-    when is_binary(id) and is_boolean(visible), do: true
-  defp valid_object_data?(_), do: false
-
-  defp valid_text_data?(%{"text" => text, "position" => %{"x" => x, "y" => y}})
+  defp valid_text?(%{"text" => text, "position" => %{"x" => x, "y" => y}})
     when is_binary(text) and is_number(x) and is_number(y), do: true
-  defp valid_text_data?(_), do: false
+  defp valid_text?(_), do: false
+
+  defp valid_layer?(%{"layer_id" => id, "visible" => visible})
+    when is_binary(id) and is_boolean(visible), do: true
+  defp valid_layer?(_), do: false
 
 
   # Add authorization logic here

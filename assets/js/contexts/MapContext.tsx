@@ -28,7 +28,7 @@ interface MapContextProviderProps {
 }
 
 export const MapContextProvider = ({ children }: MapContextProviderProps) => {
-  const [activeTool, setActiveTool] = useState<ToolType>("brush");
+  const [activeTool, setActiveTool] = useState<ToolType>("terrain");
 
   // Initialize with defaults for all tools
   const [toolSettings, setToolSettings] = useState<ToolSettings>(() => {
