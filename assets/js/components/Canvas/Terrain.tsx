@@ -1,6 +1,6 @@
 import { Layer } from "react-konva";
 
-const Foreground = ({ children }: { children?: React.ReactNode }) => {
+const Terrain = ({ children }: { children?: React.ReactNode }) => {
   return (
     <Layer>
       {children}
@@ -8,4 +8,4 @@ const Foreground = ({ children }: { children?: React.ReactNode }) => {
   );
 };
 
-export default Foreground;
+export default Terrain;

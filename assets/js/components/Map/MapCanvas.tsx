@@ -4,8 +4,7 @@ import { Stage, Line } from "react-konva";
 
 import { Channel } from "phoenix";
 
-import Background from "../Canvas/Background";
-import Foreground from "../Canvas/Terrain";
+import { Background, Terrain, Features } from "../Canvas";
 import { useMapContext } from "../../contexts/MapContext";
 import ChannelSync from "../../hooks/ChannelSync";
 import { getToolHandlers } from "./tools/toolRegistry";
@@ -111,7 +110,7 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
       onTouchEnd={handleMouseUp}
     >
       <Background />
-      <Foreground>
+      <Terrain>
         {lines.map((line, i) => (
           <Line
             key={i}
@@ -127,7 +126,8 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
             }
           />
         ))}
-      </Foreground>
+      </Terrain>
+      <Features />
     </Stage>
   );
 };
