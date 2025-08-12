@@ -5,7 +5,7 @@ import { Stage, Line } from "react-konva";
 import { Channel } from "phoenix";
 
 import Background from "../Canvas/Background";
-import Foreground from "../Canvas/Foreground";
+import Foreground from "../Canvas/Terrain";
 import { useMapContext } from "../../contexts/MapContext";
 import ChannelSync from "../../hooks/ChannelSync";
 import { getToolHandlers } from "./tools/toolRegistry";

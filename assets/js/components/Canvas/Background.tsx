@@ -1,4 +1,4 @@
-import { Layer, Rect, Text } from "react-konva";
+import { Layer, Rect } from "react-konva";
 import { rgb } from "d3-color";
 
 const Background = () => {
