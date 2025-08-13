@@ -32,7 +32,7 @@ const terrainTool = {
     const position = getPointerPosition(event);
     if (!position) return;
 
-    if (lines.length === 0) return;
+    if (lines.length === 0) return; // Look here if we wanna just click to get terrain
 
     const lastLine = lines[lines.length - 1];
     if (lastLine.tool !== "terrain") return;
