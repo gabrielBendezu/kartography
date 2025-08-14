@@ -22,9 +22,11 @@ const BrushStroke = ({ line, settings }: BrushStrokeProps): JSX.Element => {
     ) {
       return true;
     }
-    if (line.tool === "brush" && hasTextureEffects(settings as BrushConfig)) {
-      return true;
-    }
+    // if (line.tool === "brush" && 
+    //   hasTextureEffects(settings as BrushConfig)
+    // ) {
+    //   return true;
+    // }
     return false;
   };
 
@@ -71,9 +73,14 @@ const BrushStroke = ({ line, settings }: BrushStrokeProps): JSX.Element => {
     );
   };
 
-  return needsCustomShape()
-    ? line.tool === "terrain"
-      ? renderTerrainShape()
-      : renderBrushShape()
-    : renderStandardLine();
+  // Determine which rendering method to use
+  if (needsCustomShape()) {
+    if (line.tool === "terrain") {
+      return renderTerrainShape();
+    } else {
+      return renderBrushShape();
+    }
+  } else {
+    return renderStandardLine();
+  }
 };
