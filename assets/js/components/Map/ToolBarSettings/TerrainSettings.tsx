@@ -1,5 +1,5 @@
 import { useMapContext } from "../../../contexts/MapContext";
-import { TerrainConfig } from "../types";
+import { TerrainConfig } from "../../../types/types";
 
 const TerrainSettings = () => {
   const { getActiveToolSettings, setToolSettings, activeTool } =

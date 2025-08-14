@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { ToolType, ToolSettings } from "../components/Map/types";
+import { ToolType, ToolSettings } from "../types/types";
 import {
   getToolHandlers,
   getDefaultSettingsForTool,

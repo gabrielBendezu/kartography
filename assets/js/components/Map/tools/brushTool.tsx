@@ -1,7 +1,7 @@
 import React from "react";
 import Konva from "konva";
 import { Channel } from "phoenix";
-import { BrushConfig, BrushLine } from "../types";
+import { BrushConfig, BrushLine } from "../../../types/types";
 
 const brushTool = {
   handleMouseDown: (

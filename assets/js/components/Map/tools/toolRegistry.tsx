@@ -1,5 +1,5 @@
 import React from "react";
-import { ToolType } from "../types";
+import { ToolType } from "../../../types/types";
 import brushTool from "./brushTool";
 import terrainTool from "./terrainTool";
 import { BrushSettings, TerrainSettings } from "../ToolbarSettings";

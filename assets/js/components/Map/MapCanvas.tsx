@@ -8,7 +8,7 @@ import { Background, Terrain, Features } from "../Canvas";
 import { useMapContext } from "../../contexts/MapContext";
 import ChannelSync from "../../hooks/ChannelSync";
 import { getToolHandlers } from "./tools/toolRegistry";
-import { ToolType, BrushLine } from "./types";
+import { ToolType, BrushLine } from "../../types/types";
 
 interface MapCanvasProps {
   channel: Channel;
@@ -126,6 +126,13 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
             }
           />
         ))}
+
+        {/*
+        {lines.map((line, i) => {
+            const settings = getSettingsForTool(line.tool);
+            return <BrushStroke key={i} line={line} settings={settings} />;
+          })}
+        */}
       </Terrain>
       <Features />
     </Stage>
