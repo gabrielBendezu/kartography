@@ -2,6 +2,12 @@ import React, { JSX } from "react";
 import { Line, Shape } from "react-konva";
 import { BrushLine, TerrainConfig, BrushConfig } from "../../../types/types";
 
+/*
+  - Create a custom Konva shape that renders the terrain stroke with built-in coastline effects
+  - Use Shape.sceneFunc() to draw the main terrain and add wavy edges using canvas operations
+  - Apply different rendering for interior vs edge pixels
+*/
+
 interface BrushStrokeProps {
   line: BrushLine;
   settings: TerrainConfig | BrushConfig;

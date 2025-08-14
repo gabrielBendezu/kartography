@@ -26,11 +26,6 @@ export interface TerrainConfig {
     fadeDistance: number;
   }
 }
-/*
-  - Create a custom Konva shape that renders the terrain stroke with built-in coastline effects
-  - Use Shape.sceneFunc() to draw the main terrain and add wavy edges using canvas operations
-  - Apply different rendering for interior vs edge pixels
-*/
 
 export interface BrushConfig {
   width: number;
