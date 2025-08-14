@@ -11,7 +11,9 @@ const Background = () => {
         y={0}
         width={window.innerWidth}
         height={window.innerHeight}
-        fill={marineBlue}
+        fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+        fillLinearGradientEndPoint={{ x: 0, y: window.innerHeight }}
+        fillLinearGradientColorStops={[0, '#1a5280', 0.5, '#2d6fa8', 1, '#4a8bc2']}
       />
     </Layer>
   );
