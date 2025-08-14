@@ -1,10 +1,11 @@
 import Konva from "konva";
 import React from "react";
-import { Stage, Line } from "react-konva";
+import { Stage } from "react-konva";
 
 import { Channel } from "phoenix";
 
 import { Background, Terrain, Features } from "../Canvas";
+import BrushStroke from "../Canvas/shapes/Brushstroke";
 import { useMapContext } from "../../contexts/MapContext";
 import ChannelSync from "../../hooks/ChannelSync";
 import { getToolHandlers } from "./tools/toolRegistry";
@@ -112,27 +113,8 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
       <Background />
       <Terrain>
         {lines.map((line, i) => (
-          <Line
-            key={i}
-            points={line.points}
-            stroke={line.color}
-            strokeWidth={line.width}
-            opacity={line.opacity}
-            tension={0.5}
-            lineCap="round"
-            lineJoin="round"
-            globalCompositeOperation={
-              line.tool === "eraser" ? "destination-out" : "source-over"
-            }
-          />
+          <BrushStroke key={i} line={line} />
         ))}
-
-        {/*
-        {lines.map((line, i) => {
-            const settings = getSettingsForTool(line.tool);
-            return <BrushStroke key={i} line={line} settings={settings} />;
-          })}
-        */}
       </Terrain>
       <Features />
     </Stage>

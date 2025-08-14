@@ -3,6 +3,7 @@ import { ToolType, ToolSettings } from "../types/types";
 import {
   getToolHandlers,
   getDefaultSettingsForTool,
+  updateToolRenderer,
 } from "../components/Map/tools/toolRegistry";
 
 interface MapContextType {
@@ -37,6 +38,8 @@ export const MapContextProvider = ({ children }: MapContextProviderProps) => {
       const defaultSettings = getDefaultSettingsForTool(tool as ToolType);
       if (defaultSettings) {
         settings[tool as ToolType] = defaultSettings;
+        // Initialize render functions for each tool
+        updateToolRenderer(tool as ToolType, defaultSettings);
       }
     });
     return settings;
@@ -47,6 +50,9 @@ export const MapContextProvider = ({ children }: MapContextProviderProps) => {
       ...prev,
       [tool]: newSettings,
     }));
+    
+    // Update the tool's render function when settings change
+    updateToolRenderer(tool, newSettings);
   };
 
   const getActiveToolSettings = () => toolSettings[activeTool];
