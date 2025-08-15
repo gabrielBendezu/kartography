@@ -3,6 +3,10 @@ import { Line, Shape } from "react-konva";
 import { BrushLine, TerrainConfig } from "../../../../types";
 import { useTerrainMask } from "../../../../contexts/TerrainMaskContext";
 
+// TODO: 
+// The terrainrenderer needs to make the special coastline effects, not for the lines being drawn, but for the entire mass that exists
+// Through the context? It should probably be a separate rendering call.
+
 const renderTerrainWithCoastline = (line: BrushLine): React.JSX.Element => {
   const { addTerrainMask } = useTerrainMask();
   const addedRef = useRef(false);
