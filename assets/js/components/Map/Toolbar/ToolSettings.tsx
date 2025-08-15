@@ -23,7 +23,7 @@ const ToolSettings = ({
     >
       <div className="card-body p-4">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="card-title text-sm">Tool Settings</h3>
+          <h3 className="card-title text-sm">Settings</h3>
           <button className="btn btn-ghost btn-xs btn-circle" onClick={onClose}>
             ✕
           </button>

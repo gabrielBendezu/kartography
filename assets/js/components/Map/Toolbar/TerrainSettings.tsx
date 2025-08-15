@@ -8,9 +8,23 @@ const TerrainSettings = () => {
 
   const handleTerrainChange = (
     key: keyof TerrainConfig,
-    value: number | string
+    value: number | string | boolean
   ) => {
     const newSettings = { ...terrainConfig, [key]: value };
+
+    setToolSettings(activeTool, newSettings);
+  };
+
+  const handleCoastlineToggle = (enabled: boolean) => {
+    const newSettings = {
+      ...terrainConfig,
+      coastlineEffect: {
+        enabled,
+        waveAmplitude: terrainConfig.coastlineEffect?.waveAmplitude || 5,
+        waveFrequency: terrainConfig.coastlineEffect?.waveFrequency || 0.1,
+        fadeDistance: terrainConfig.coastlineEffect?.fadeDistance || 10,
+      },
+    };
 
     setToolSettings(activeTool, newSettings);
   };
@@ -64,6 +78,17 @@ const TerrainSettings = () => {
         <span className="text-xs text-base-content/70 text-center mt-1">
           {Math.round(terrainConfig.opacity * 100)}%
         </span>
+      </div>
+      <div className="form-control">
+        <label className="label cursor-pointer py-1">
+          <span className="label-text text-xs font-medium">Special Coastline:</span>
+          <input
+            type="checkbox"
+            checked={terrainConfig.coastlineEffect?.enabled || false}
+            className="checkbox checkbox-primary checkbox-sm"
+            onChange={(e) => handleCoastlineToggle(e.target.checked)}
+          />
+        </label>
       </div>
     </div>
   );

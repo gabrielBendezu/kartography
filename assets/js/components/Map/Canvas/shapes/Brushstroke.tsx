@@ -1,6 +1,6 @@
 import React, { JSX } from "react";
-import { BrushLine, ToolType } from "../../../types/types";
-import { getToolHandlers } from "../../Map/tools/toolRegistry";
+import { BrushLine, ToolType } from "../../../../types/types";
+import { getToolHandlers } from "../../tools/toolRegistry";
 
 interface BrushStrokeProps {
   line: BrushLine;
