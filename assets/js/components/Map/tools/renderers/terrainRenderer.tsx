@@ -4,6 +4,21 @@ import { BrushLine, TerrainConfig } from "../../../../types";
 import { useTerrainMask } from "../../../../contexts/TerrainMaskContext";
 
 const renderTerrainWithCoastline = (line: BrushLine): React.JSX.Element => {
+  const { addTerrainMask } = useTerrainMask();
+  const addedRef = useRef(false);
+
+  useEffect(() => {
+    if (!addedRef.current) {
+      const maskId = `terrain-coastline-${line.points.join('-')}`;
+      addTerrainMask({
+        id: maskId,
+        points: line.points,
+        width: line.width
+      });
+      addedRef.current = true;
+    }
+  }, [line.points, line.width, addTerrainMask]);
+
   console.log("rendering with the special terrian thing");
   return (
     <Shape
@@ -26,46 +41,54 @@ const renderTerrainWithCoastline = (line: BrushLine): React.JSX.Element => {
           context.lineJoin = "round";
           context.stroke();
           
-          // Apply coastline wave effects on edges
-          context.globalAlpha = 0.3;
-          context.strokeStyle = 'rgba(0, 50, 100, 0.5)';
-          context.lineWidth = line.width * 0.8;
+          // Apply coastline effects using Konva composite operations
+          context.save();
           
-          // Create wavy shadow effect
-          const waveAmplitude = line.width * 0.3;
-          const waveFrequency = 0.02;
-          const shadowOffset = 3;
+          // Create shadow/depth effect
+          context.globalCompositeOperation = "multiply";
+          context.shadowColor = "rgba(0, 30, 60, 0.6)";
+          context.shadowBlur = line.width * 0.5;
+          context.shadowOffsetX = 2;
+          context.shadowOffsetY = 2;
           
+          // Draw the base coastline with shadow
           context.beginPath();
-          if (line.points.length >= 4) {
-            context.moveTo(line.points[0] + shadowOffset, line.points[1] + shadowOffset);
-            
-            for (let i = 2; i < line.points.length; i += 2) {
-              const x = line.points[i] + shadowOffset;
-              const y = line.points[i + 1] + shadowOffset;
-              const waveY = y + Math.sin(x * waveFrequency) * waveAmplitude;
-              context.lineTo(x, waveY);
-            }
-            context.stroke();
+          context.moveTo(line.points[0], line.points[1]);
+          for (let i = 2; i < line.points.length; i += 2) {
+            context.lineTo(line.points[i], line.points[i + 1]);
           }
-          
-          // Create main wavy coastline
-          context.globalAlpha = line.opacity;
           context.strokeStyle = line.color;
           context.lineWidth = line.width;
+          context.stroke();
           
+          // Add foam/wave effect with overlay
+          context.globalCompositeOperation = "overlay";
+          context.shadowColor = "transparent";
+          context.strokeStyle = "rgba(255, 255, 255, 0.4)";
+          context.lineWidth = line.width * 0.3;
+          
+          // Create organic wave pattern using quadratic curves
           context.beginPath();
           if (line.points.length >= 4) {
             context.moveTo(line.points[0], line.points[1]);
             
-            for (let i = 2; i < line.points.length; i += 2) {
-              const x = line.points[i];
-              const y = line.points[i + 1];
-              const waveY = y + Math.sin(x * waveFrequency) * waveAmplitude * 0.7;
-              context.lineTo(x, waveY);
+            for (let i = 2; i < line.points.length - 2; i += 2) {
+              const cpX = (line.points[i] + line.points[i + 2]) / 2;
+              const cpY = (line.points[i + 1] + line.points[i + 3]) / 2;
+              
+              // Add slight wave variation
+              const waveOffset = Math.sin(i * 0.5) * (line.width * 0.1);
+              context.quadraticCurveTo(
+                line.points[i], 
+                line.points[i + 1] + waveOffset,
+                cpX, 
+                cpY
+              );
             }
             context.stroke();
           }
+          
+          context.restore();
         }
         
         context.fillStrokeShape(shape);
