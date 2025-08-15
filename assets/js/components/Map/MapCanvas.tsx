@@ -4,8 +4,8 @@ import { Stage } from "react-konva";
 
 import { Channel } from "phoenix";
 
-import { Background, Terrain, Features } from "../Canvas";
-import BrushStroke from "../Canvas/shapes/Brushstroke";
+import { Background, Terrain, Features } from "./Canvas";
+import BrushStroke from "./Canvas/shapes/Brushstroke";
 import { useMapContext } from "../../contexts/MapContext";
 import ChannelSync from "../../hooks/ChannelSync";
 import { getToolHandlers } from "./tools/toolRegistry";
