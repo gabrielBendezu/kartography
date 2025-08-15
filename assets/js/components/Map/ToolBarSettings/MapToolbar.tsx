@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import ToolSettings from "./ToolSettings";
-import { BrushSettings, TerrainSettings } from "./ToolbarSettings";
-import { useMapContext } from "../../contexts/MapContext";
+import { BrushSettings, TerrainSettings } from ".";
+import { useMapContext } from "../../../contexts/MapContext";
 
-import { ToolType } from "../../types/types";
+import { ToolType } from "../../../types/types";
 
 const MapToolbar = () => {
   const { activeTool, setActiveTool } = useMapContext();
