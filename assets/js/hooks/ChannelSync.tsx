@@ -1,7 +1,7 @@
 import { Channel } from "phoenix";
 import Konva from "konva";
 import React, { useEffect } from "react";
-import { ToolType } from "../types/types";
+import { ToolType } from "../types";
 
 const ChannelSync = (
   channel: Channel,

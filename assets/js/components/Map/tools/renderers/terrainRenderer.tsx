@@ -1,6 +1,6 @@
 import React from "react";
 import { Line, Shape } from "react-konva";
-import { BrushLine, TerrainConfig } from "../../../../types/types";
+import { BrushLine, TerrainConfig } from "../../../../types";
 
 const renderTerrainWithCoastline = (line: BrushLine): React.JSX.Element => {
   return (

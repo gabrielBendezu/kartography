@@ -1,6 +1,6 @@
 import React from "react";
 import { Line, Shape } from "react-konva";
-import { BrushLine, BrushConfig } from "../../../../types/types";
+import { BrushLine, BrushConfig } from "../../../../types";
 
 const renderBrushWithTexture = (line: BrushLine): React.JSX.Element => {
   return (
