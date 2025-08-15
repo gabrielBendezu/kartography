@@ -5,9 +5,10 @@ import terrainTool from "./terrainTool";
 import { BrushSettings, TerrainSettings } from "../Toolbar";
 import { getTerrainRenderer } from "./renderers/terrainRenderer";
 import { getBrushRenderer } from "./renderers/brushRenderer";
+import Konva from "konva";
 
 interface ToolConfig {
-  handlers?: any;
+  handlers?: any; // Add ToolHandlers interface here.
   settings?: React.ComponentType<any>;
   defaultSettings?: any;
   renderFunction?: (line: any) => React.JSX.Element;
@@ -18,7 +19,7 @@ export const getToolHandlers: Record<ToolType, ToolConfig> = {
   terrain: {
     handlers: terrainTool,
     settings: TerrainSettings,
-    defaultSettings: { color: "#668866", width: 60, opacity: 1 },
+    defaultSettings: { color: "#668866", width: 100, opacity: 1 },
   },
   brush: {
     handlers: brushTool,
@@ -58,4 +59,21 @@ export const updateToolRenderer = (tool: ToolType, settings: any) => {
   if (toolConfig) {
     toolConfig.renderFunction = determineRenderer(tool, settings);
   }
+};
+
+// TODO: make the tools utilise this from here
+const getPointerPosition = (
+  event: Konva.KonvaEventObject<MouseEvent | TouchEvent>
+): Konva.Vector2d | null => {
+  const stage = event.target.getStage();
+  if (!stage) {
+    console.warn("Stage not found", event);
+    return null;
+  }
+  const position = stage.getPointerPosition();
+  if (!position) {
+    console.warn("Position unavailable");
+    return null;
+  }
+  return position;
 };

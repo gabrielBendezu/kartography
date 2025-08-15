@@ -1,3 +1,7 @@
+import Konva from "konva";
+import { BrushLine } from "./canvas";
+import { Channel } from "phoenix";
+
 export type ToolType =
   | "select"
   | "terrain"
@@ -24,7 +28,7 @@ export interface TerrainConfig {
     waveAmplitude: number;
     waveFrequency: number;
     fadeDistance: number;
-  }
+  };
 }
 
 export interface BrushConfig {
@@ -38,4 +42,28 @@ export interface ToolActionPayload {
   tool: ToolType;
   data: any;
   clientId?: string;
+}
+
+// TODO: use this interface for all the tools.
+interface ToolHandlers {
+  handleMouseDown: (
+    event: Konva.KonvaEventObject<MouseEvent | TouchEvent>,
+    settings: any,
+    lines: BrushLine[],
+    setLines: React.Dispatch<React.SetStateAction<BrushLine[]>>
+  ) => void;
+
+  handleMouseMove: (
+    event: Konva.KonvaEventObject<MouseEvent | TouchEvent>,
+    lines: BrushLine[],
+    setLines: React.Dispatch<React.SetStateAction<BrushLine[]>>
+  ) => void;
+
+  handleMouseUp: (channel: Channel, lines: BrushLine[]) => void;
+
+  handleReceiveAction: (
+    data: any,
+    lines: BrushLine[],
+    setLines: React.Dispatch<React.SetStateAction<BrushLine[]>>
+  ) => void;
 }

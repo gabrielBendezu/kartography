@@ -38,7 +38,7 @@ const TerrainSettings = () => {
         <input
           type="range"
           min="1"
-          max="50"
+          max="150"
           value={terrainConfig.width}
           className="range range-primary range-xs"
           onChange={(e) =>
