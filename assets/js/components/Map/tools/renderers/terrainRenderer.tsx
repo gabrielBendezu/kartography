@@ -23,7 +23,7 @@ const renderTerrainWithCoastline = (line: BrushLine): React.JSX.Element => {
     }
   }, [line.points, line.width, addTerrainMask]);
 
-  console.log("rendering with the special terrian thing");
+  console.log("rendering with the special terrain thing");
   return (
     <Shape
       key={`terrain-coastline-${line.points.join('-')}`}
