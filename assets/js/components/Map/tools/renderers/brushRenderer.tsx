@@ -1,6 +1,7 @@
 import React from "react";
-import { Line, Shape } from "react-konva";
+import { Shape } from "react-konva";
 import { BrushLine, BrushConfig } from "../../../../types";
+import { useTerrainMask } from "../../../../contexts/TerrainMaskContext";
 
 const renderBrushWithTexture = (line: BrushLine): React.JSX.Element => {
   return (
@@ -38,24 +39,54 @@ const renderBrushWithTexture = (line: BrushLine): React.JSX.Element => {
 };
 
 const renderBrushStandard = (line: BrushLine): React.JSX.Element => {
+  const { terrainMasks } = useTerrainMask();
+
   return (
-    <Line
-      key={`brush-standard-${line.points.join('-')}`}
-      points={line.points}
-      stroke={line.color}
-      strokeWidth={line.width}
-      opacity={line.opacity}
-      tension={0.5}
-      lineCap="round"
-      lineJoin="round"
-      globalCompositeOperation={
-        line.tool === "eraser" ? "destination-out" : "source-over"
-      }
+    <Shape
+      key={`brush-masked-${line.points.join('-')}`}
+      sceneFunc={(context, shape) => {
+        if (line.points.length < 4) return;
+
+        context.beginPath();
+        
+        // Create clipping path from terrain masks
+        if (terrainMasks.length > 0) {
+          terrainMasks.forEach(mask => {
+            if (mask.points.length >= 4) {
+              context.moveTo(mask.points[0], mask.points[1]);
+              for (let i = 2; i < mask.points.length; i += 2) {
+                context.lineTo(mask.points[i], mask.points[i + 1]);
+              }
+              context.lineWidth = mask.width;
+              context.lineCap = "round";
+              context.lineJoin = "round";
+            }
+          });
+          context.clip();
+        }
+
+        // Draw brush stroke only within clipped area
+        context.beginPath();
+        context.moveTo(line.points[0], line.points[1]);
+        
+        for (let i = 2; i < line.points.length; i += 2) {
+          context.lineTo(line.points[i], line.points[i + 1]);
+        }
+        
+        context.strokeStyle = line.color;
+        context.lineWidth = line.width;
+        context.globalAlpha = line.opacity;
+        context.lineCap = "round";
+        context.lineJoin = "round";
+        context.stroke();
+        
+        context.fillStrokeShape(shape);
+      }}
     />
   );
 };
 
-export const getBrushRenderer = (settings: BrushConfig): ((line: BrushLine) => React.JSX.Element) => {
+export const getBrushRenderer = (_settings: BrushConfig): ((line: BrushLine) => React.JSX.Element) => {
   // Check for texture effects when implemented
   // if (settings.textureEffect?.enabled) {
   //   return renderBrushWithTexture;

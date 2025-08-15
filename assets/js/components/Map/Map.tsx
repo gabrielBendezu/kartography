@@ -7,6 +7,7 @@ import { Channel } from "phoenix";
 import { Background, Terrain, Features } from "./Canvas";
 import BrushStroke from "./Canvas/shapes/Brushstroke";
 import { useMapContext } from "../../contexts/MapContext";
+import { TerrainMaskProvider } from "../../contexts/TerrainMaskContext";
 import ChannelSync from "../../hooks/ChannelSync";
 import { getToolHandlers } from "./tools/toolRegistry";
 import { ToolType, BrushLine } from "../../types";
@@ -97,27 +98,37 @@ const MapCanvas = ({ channel }: MapCanvasProps) => {
     isDrawing.current = false;
   };
 
+  // Separate terrain and brush strokes
+  const terrainLines = lines.filter(line => line.tool === 'terrain');
+  const brushLines = lines.filter(line => line.tool === 'brush');
+
   return (
-    <Stage
-      ref={stageRef}
-      className="w-full h-full border border-base-300 cursor-crosshair focus:outline-2 focus:outline-info focus:outline-offset-2"
-      width={window.innerWidth}
-      height={window.innerHeight - 25}
-      onMouseDown={handleMouseDown}
-      onMousemove={handleMouseMove}
-      onMouseup={handleMouseUp}
-      onTouchStart={handleMouseDown}
-      onTouchMove={handleMouseMove}
-      onTouchEnd={handleMouseUp}
-    >
-      <Background />
-      <Terrain>
-        {lines.map((line, i) => (
-          <BrushStroke key={i} line={line} />
-        ))}
-      </Terrain>
-      <Features />
-    </Stage>
+    <TerrainMaskProvider>
+      <Stage
+        ref={stageRef}
+        className="w-full h-full border border-base-300 cursor-crosshair focus:outline-2 focus:outline-info focus:outline-offset-2"
+        width={window.innerWidth}
+        height={window.innerHeight - 25}
+        onMouseDown={handleMouseDown}
+        onMousemove={handleMouseMove}
+        onMouseup={handleMouseUp}
+        onTouchStart={handleMouseDown}
+        onTouchMove={handleMouseMove}
+        onTouchEnd={handleMouseUp}
+      >
+        <Background />
+        <Terrain>
+          {terrainLines.map((line, i) => (
+            <BrushStroke key={`terrain-${i}`} line={line} />
+          ))}
+        </Terrain>
+        <Features>
+          {brushLines.map((line, i) => (
+            <BrushStroke key={`brush-${i}`} line={line} />
+          ))}
+        </Features>
+      </Stage>
+    </TerrainMaskProvider>
   );
 };
 
