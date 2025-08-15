@@ -1,7 +1,7 @@
 import React from "react";
 import Konva from "konva";
 import { Channel } from "phoenix";
-import { TerrainConfig, BrushLine } from "../../../types/types";
+import { TerrainConfig, BrushLine } from "../../../types";
 
 const terrainTool = {
   handleMouseDown: (

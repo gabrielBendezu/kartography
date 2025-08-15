@@ -1,5 +1,5 @@
 import { useMapContext } from "../../../contexts/MapContext";
-import { BrushConfig } from "../../../types/types";
+import { BrushConfig } from "../../../types";
 
 const BrushSettings = () => {
   const { getActiveToolSettings, setToolSettings, activeTool } =

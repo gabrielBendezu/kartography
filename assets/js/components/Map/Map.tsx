@@ -9,7 +9,7 @@ import BrushStroke from "./Canvas/shapes/Brushstroke";
 import { useMapContext } from "../../contexts/MapContext";
 import ChannelSync from "../../hooks/ChannelSync";
 import { getToolHandlers } from "./tools/toolRegistry";
-import { ToolType, BrushLine } from "../../types/types";
+import { ToolType, BrushLine } from "../../types";
 
 interface MapCanvasProps {
   channel: Channel;

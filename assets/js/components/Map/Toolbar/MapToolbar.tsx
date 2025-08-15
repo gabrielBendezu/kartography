@@ -3,7 +3,7 @@ import ToolSettings from "./ToolSettings";
 import { BrushSettings, TerrainSettings } from ".";
 import { useMapContext } from "../../../contexts/MapContext";
 
-import { ToolType } from "../../../types/types";
+import { ToolType } from "../../../types";
 
 const MapToolbar = () => {
   const { activeTool, setActiveTool } = useMapContext();

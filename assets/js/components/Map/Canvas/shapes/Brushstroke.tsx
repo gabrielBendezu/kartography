@@ -1,12 +1,12 @@
 import React, { JSX } from "react";
-import { BrushLine, ToolType } from "../../../../types/types";
+import { BrushLine, ToolType } from "../../../../types";
 import { getToolHandlers } from "../../tools/toolRegistry";
 
 interface BrushStrokeProps {
   line: BrushLine;
 }
 
-const BrushStroke = ({ line }: BrushStrokeProps): JSX.Element => {
+const Brushstroke = ({ line }: BrushStrokeProps): JSX.Element => {
   const toolConfig = getToolHandlers[line.tool as ToolType];
   const renderFunction = toolConfig?.renderFunction;
   
@@ -19,4 +19,4 @@ const BrushStroke = ({ line }: BrushStrokeProps): JSX.Element => {
   return <></>;
 };
 
-export default BrushStroke;
+export default Brushstroke;
