@@ -1,4 +1,4 @@
-import MapToolbar from "./ToolbarSettings/MapToolbar";
+import MapToolbar from "./Toolbar/MapToolbar";
 import { MapContextProvider } from "../../contexts/MapContext";
 import MapCanvas from "./MapCanvas";
 

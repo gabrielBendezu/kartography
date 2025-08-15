@@ -2,7 +2,7 @@ import React from "react";
 import { ToolType, BrushLine } from "../../../types/types";
 import brushTool from "./brushTool";
 import terrainTool from "./terrainTool";
-import { BrushSettings, TerrainSettings } from "../ToolbarSettings";
+import { BrushSettings, TerrainSettings } from "../Toolbar";
 import { getTerrainRenderer } from "./renderers/terrainRenderer";
 import { getBrushRenderer } from "./renderers/brushRenderer";
 
