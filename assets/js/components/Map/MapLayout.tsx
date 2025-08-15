@@ -1,6 +1,6 @@
 import MapToolbar from "./Toolbar/MapToolbar";
 import { MapContextProvider } from "../../contexts/MapContext";
-import MapCanvas from "./MapCanvas";
+import MapCanvas from "./Map";
 
 import { Channel } from "phoenix";
 
